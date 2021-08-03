@@ -1,20 +1,49 @@
 const router = require('express').Router()
 const { models: { User }} = require('../../db')
 module.exports = router;
-
-// router.get('/', async (req, res, next) => {
-//   try {
-//     const users = await User.findAll({
-//       // explicitly select only the id and username fields - even though
-//       // users' passwords are encrypted, it won't help if we just
-//       // send everything to anyone who asks!
-//       attributes: ['id', 'username']
-//     })
-//     res.json(users)
-//   } catch (err) {
-//     next(err)
-//   }
-// })
+const {createUser, getUser, updateUser} = require('../controllers/user.js')
 
 
-router.get('/', a);
+router.post("/", createUser);
+
+router.get("/:id", getUser);
+
+router.put("/:id", updateUser);
+
+router.use((req, res, next) => {
+  const err = new Error("API route not found!");
+  err.status = 404;
+  next(err);
+});
+
+module.exports = router;
+
+
+// _
+// ,.-" "-.,
+// /   ===   \
+// /  =======  \
+// __|  (o)   (0)  |__
+// / _|    .---.    |_ \
+// | /.----/ O O \----.\ |
+// \/     |     |     \/
+// |                   |
+// |                   |
+// |                   |
+// _\   -.,_____,.-   /_
+// ,.-"  "-.,_________,.-"  "-.,
+// /          |       |          \
+// |           l.     .l           |
+// |            |     |            |
+// l.           |     |           .l
+// |           l.   .l           | \,
+// l.           |   |           .l   \,
+// |           |   |           |      \,
+// l.          |   |          .l        |
+// |          |   |          |         |
+// |          |---|          |         |
+// |          |   |          |         |
+// /"-.,__,.-"\   /"-.,__,.-"\"-.,_,.-"\
+// |            \ /            |         |
+// |             |             |         |
+// \__|__|__|__/ \__|__|__|__/ \_|__|__/
