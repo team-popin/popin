@@ -21,3 +21,5 @@ const Product = db.define('product', {
 });
 
 module.exports = Product;
+
+
