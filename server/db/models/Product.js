@@ -10,14 +10,16 @@ const Product = db.define('product', {
     type: Sequelize.FLOAT,
     decimals: 2, //I think this may work, but it's possibly incorrect https://sequelize.org/master/class/lib/data-types.js~FLOAT.html
   },
-  ProductPic: {
+  productPic: {
     type: Sequelize.STRING,
     defaultValue: 'https://picsum.photos/200',
   },
-  Description: {
+  description: {
     type: Sequelize.TEXT,
     allowNull: false,
   },
 });
 
 module.exports = Product;
+
+
