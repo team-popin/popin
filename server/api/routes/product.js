@@ -11,16 +11,16 @@ const {
 router.get('/', getAllProducts);
 
 // get product by id
-router.get('/product/:id', getProduct);
+router.get('/:id', getProduct);
 
 // create product
-router.post('/product', createProduct);
+router.post('/', createProduct);
 
 // update product by id
-router.put('/product/:id', updateProduct);
+router.put('/:id', updateProduct);
 
 // delete product by id
-router.delete('/product/:id', deleteProduct);
+router.delete('/:id', deleteProduct);
 
 router.use((req, res, next) => {
   const err = new Error('API route not found!');

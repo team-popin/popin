@@ -43,7 +43,7 @@ const mapLogin = state => {
   return {
     name: 'login',
     displayName: 'Login',
-    error: state.auth.error
+    error: state.user.error
   }
 }
 
@@ -51,7 +51,7 @@ const mapSignup = state => {
   return {
     name: 'signup',
     displayName: 'Sign Up',
-    error: state.auth.error
+    error: state.user.error
   }
 }
 
