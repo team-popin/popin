@@ -87,7 +87,7 @@ export default function LogIn(props) {
           <Grid container>
             <Grid item xs>
               <Link href="/signup" variant="body2">
-                Forgot password?
+                Forgot password??
               </Link>
             </Grid>
             <Grid item>
