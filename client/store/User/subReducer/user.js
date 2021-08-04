@@ -7,7 +7,7 @@ const TOKEN = 'token';
 const SET_AUTH = 'SET_AUTH';
 
 // ACTION CREATORS
-const setAuth = auth => ({ type: SET_AUTH, user });
+const setAuth = user => ({ type: SET_AUTH, user });
 
 // THUNK CREATORS
 export const me = () => async dispatch => {
@@ -22,11 +22,12 @@ export const me = () => async dispatch => {
   }
 };
 
-export const authenticate = (username, password, method) => async dispatch => {
+export const authenticate = (email, password, method) => async dispatch => {
   try {
-    const res = await axios.post(`/auth/${method}`, { username, password });
+    const res = await axios.post(`/auth/${method}`, { email, password });
     window.localStorage.setItem(TOKEN, res.data.token);
     dispatch(me());
+    history.push('/product');
   } catch (authError) {
     return dispatch(setAuth({ error: authError }));
   }
