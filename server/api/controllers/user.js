@@ -1,4 +1,6 @@
-const { models: { User }} = require('../db')
+const {
+  models: { User, Order },
+} = require('../../db');
 
 const createUser = async (req, res, next) => {
   try {
@@ -6,17 +8,19 @@ const createUser = async (req, res, next) => {
   } catch (e) {
     next(e);
   }
-}
+};
 
 const getUser = async (req, res, next) => {
   try {
-    res.send(await User.findByPk(req.params.id, {
-      include: Order,
-    }))
+    res.send(
+      await User.findByPk(req.params.id, {
+        include: Order,
+      })
+    );
   } catch (e) {
-      next(e);
-    }
+    next(e);
   }
+};
 
 const updateUser = async (req, res, next) => {
   try {
@@ -25,10 +29,10 @@ const updateUser = async (req, res, next) => {
   } catch (e) {
     next(e);
   }
-}
+};
 
-module.exports= {
+module.exports = {
   createUser,
   getUser,
-  updateUser
-}
+  updateUser,
+};
