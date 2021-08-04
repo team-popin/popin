@@ -7,6 +7,7 @@ class AllProducts extends Component {
   componentDidMount() {
     this.props.fetchProducts();
   }
+
   render() {
     const products = this.props.products;
     return (
@@ -16,9 +17,11 @@ class AllProducts extends Component {
     );
   }
 }
+
 const mapState = ({ products }) => ({
   products,
 });
+
 const mapDispatch = dispatch => ({
   fetchProducts: () => dispatch(fetchProducts()),
 });

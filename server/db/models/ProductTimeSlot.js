@@ -8,4 +8,6 @@ const ProductTimeSlot = db.define('productTimeSlot', {
   },
 });
 
+// add hook for price at the time it was purchased
+
 module.exports = ProductTimeSlot;

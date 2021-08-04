@@ -8,7 +8,7 @@ const ProductTimeSlot = require('./models/ProductTimeSlot')
 const Category = require('./models/Category')
 const Order = require('./models/Order')
 
-//associations could go here!
+// associations could go here!
 User.hasMany(Product)
 Product.belongsTo(User) 
 
