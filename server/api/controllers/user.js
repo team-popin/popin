@@ -1,6 +1,6 @@
 const {
   models: { User, Order },
-} = require('../../db/models');
+} = require('../../db');
 
 const createUser = async (req, res, next) => {
   try {

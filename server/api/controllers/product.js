@@ -1,6 +1,6 @@
 const {
   models: { Product, ProductTimeSlot, Category, User },
-} = require('../../db/models');
+} = require('../../db');
 
 const createProduct = async (req, res, next) => {
   try {
