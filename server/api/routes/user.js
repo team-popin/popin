@@ -1,23 +1,20 @@
-const router = require('express').Router()
-const { models: { User }} = require('../../db')
+const router = require('express').Router();
 module.exports = router;
-const {createUser, getUser, updateUser} = require('../controllers/user.js')
+const { createUser, getUser, updateUser } = require('../controllers/user.js');
 
+router.post('/', createUser);
 
-router.post("/", createUser);
+router.get('/:id', getUser);
 
-router.get("/:id", getUser);
-
-router.put("/:id", updateUser);
+router.put('/:id', updateUser);
 
 router.use((req, res, next) => {
-  const err = new Error("API route not found!");
+  const err = new Error('API route not found!');
   err.status = 404;
   next(err);
 });
 
 module.exports = router;
-
 
 // _
 // ,.-" "-.,
