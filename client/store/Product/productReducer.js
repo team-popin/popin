@@ -6,7 +6,7 @@ import updateProductReducer from './subReducer/updateProduct';
 import getAllProductsReducer from './subReducer/getAllProducts'
 
 export default combineReducers({ 
-  createUserReducer, 
+  createProductReducer, 
   deleteProductReducer, 
   singleProductReducer, 
   updateProductReducer,

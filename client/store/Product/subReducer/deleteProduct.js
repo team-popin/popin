@@ -12,11 +12,11 @@ const deleteProduct = product => {
 };
 
 // THUNK CREATOR
-export const deleteProduct = (id, history) => {
+export const deleteProductThunk = (id, history) => {
   return async dispatch => {
     const { data } = await axios.delete(`/api/product/${id}`);
     dispatch(deleteProduct(data));
-    // history.push('/product');
+    history.push('/product');
   };
 };
 

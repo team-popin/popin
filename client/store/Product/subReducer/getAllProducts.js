@@ -4,7 +4,8 @@ import axios from 'axios';
 const GET_PRODUCTS = 'GET_PRODUCTS';
 
 // ACTION CREATOR
-const getProducts = products => ({ type: GET_PRODUCTS, products });
+const getProducts = products => ({ 
+  type: GET_PRODUCTS, products });
 
 // THUNK CREATOR
 export const fetchProducts = () => {
