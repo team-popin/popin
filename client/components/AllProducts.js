@@ -2,13 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchProducts } from '../store/Product/subReducer/allProducts';
-import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import CameraIcon from '@material-ui/icons/PhotoCamera';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
 import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -17,7 +13,6 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
@@ -48,6 +43,10 @@ const useStyles = makeStyles(theme => ({
   },
   cardContent: {
     flexGrow: 1,
+  },
+  cardActions: {
+    display: 'flex',
+    justifyContent: 'center',
   },
   footer: {
     backgroundColor: theme.palette.background.paper,
@@ -80,14 +79,6 @@ const AllProducts = props => {
   return (
     <React.Fragment>
       <CssBaseline />
-      {/* <AppBar position="relative">
-        <Toolbar>
-          <CameraIcon className={classes.icon} />
-          <Typography variant="h6" color="inherit" noWrap>
-            Album layout
-          </Typography>
-        </Toolbar>
-      </AppBar> */}
       <main>
         {/* Hero unit */}
         <div className={classes.heroContent}>
@@ -99,7 +90,7 @@ const AllProducts = props => {
               color="textPrimary"
               gutterBottom
             >
-              Welcome
+              Welcome, User
             </Typography>
             <Typography
               variant="h5"
@@ -107,25 +98,12 @@ const AllProducts = props => {
               color="textSecondary"
               paragraph
             >
-              Take a look at the available sessions, or post a session of your own!
+              Pick a category from the side menu to get started with a session
+              from professionals from around the world!
             </Typography>
-            <div className={classes.heroButtons}>
-              <Grid container spacing={2} justifyContent="center">
-                <Grid item>
-                  <Button variant="contained" color="primary">
-                    Main call to action
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <Button variant="outlined" color="primary">
-                    Secondary action
-                  </Button>
-                </Grid>
-              </Grid>
-            </div>
           </Container>
         </div>
-        <Container className={classes.cardGrid} maxWidth="md">
+        <Container className={classes.cardGrid} maxWidth="lg">
           {/* End hero unit */}
           <Grid container spacing={4}>
             {products.map(product => (
@@ -159,13 +137,10 @@ const AllProducts = props => {
                       {product.description}
                     </Typography>
                   </CardContent>
-                  <CardActions disableSpacing>
-                    <IconButton aria-label="add to favorites">
-                      <FavoriteIcon />
-                    </IconButton>
-                    <IconButton aria-label="share">
-                      <ShareIcon />
-                    </IconButton>
+                  <CardActions className={classes.cardActions}>
+                    <Button variant="contained" color="primary">
+                      Schedule
+                    </Button>
                   </CardActions>
                 </Card>
               </Grid>
