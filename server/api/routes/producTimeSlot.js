@@ -1,12 +1,23 @@
 const router = require('express').Router();
 const { models: { ProductTimeSlot } } = require('../../db');
 
+// POST /api/productTimeSlot/
+router.post('/', async (req, res, next) => {
+  try {
+    const newTimeSlot = await ProductTimeSlot.create({
+      dateTime: req.body.dateTime,
+    });
+    newTimeSlot.setProduct(req.body.productId);
+      // We should make sure that a user can only add a new timeslot to their own products, referencing their own productId's
+    res.json(newTimeSlot);
+  }
+  catch (err) {
+    next(err);
+  }
+});
 
 
-//get request that will send the productTimeSlot information
-// for non-logged in user
-
-// GET /productTimeSlot
+// GET /api/productTimeSlot/:id
 router.get('/:id', async (req, res, next) => {
   try {
     const productTimeSlot = await ProductTimeSlot.findByPk(req.params.id);
@@ -17,12 +28,14 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-//put request that will add the orderId to the productTimeSlot we are trying to add to our cart
+// PUT /api/productTimeSlot/:id
 router.put('/:id', async (req, res, next) => {
   try {
     const productTimeSlot = await ProductTimeSlot.findByPk(req.params.id);
     const updatedProductTimeSlot = await productTimeSlot.update({
-      orderId: req.body.orderId
+      dateTime: req.body.dateTime || productTimeSlot.dateTime,
+      productId: req.body.productId || productTimeSlot.productId,
+      orderId: req.body.orderId || productTimeSlot.orderId
     });
     res.json(updatedProductTimeSlot);
   }
@@ -31,19 +44,17 @@ router.put('/:id', async (req, res, next) => {
   }
 });
 
+// DELETE /api/productTimeSlot/:id
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const productTimeSlot = await ProductTimeSlot.findByPk(req.params.id);
+    await productTimeSlot.destroy();
+    res.sendStatus(204);
+  }
+  catch (err) {
+    next(err);
+  }
+});
+//^^NOTE: Deleting leaves the row in the db null
+
 module.exports = router;
-
-//THunk logic
-
-//Get user id
-
-//Find order associated with userId
-
-//Send put request to the productTimeSlot with the orderId that we just got above
-
-
-//If user has an existing order where isPurchased=false, then associate the ProductTimeSlot with that orderId
-
-  //If the user does not have an existing order, create a new order, and then associate the ProductTimeSlot with that orderId
-
-  // orderId
