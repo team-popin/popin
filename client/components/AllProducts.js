@@ -6,6 +6,8 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Avatar from '@material-ui/core/Avatar';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
@@ -64,15 +66,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const AllProducts = props => {
+const AllProducts = () => {
   const products = useSelector(state => state.products);
   const dispatch = useDispatch();
+  const classes = useStyles();
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
-
-  const classes = useStyles();
 
   console.log(products);
 
@@ -98,13 +99,22 @@ const AllProducts = props => {
               color="textSecondary"
               paragraph
             >
-              Pick a category from the side menu to get started with a session
-              from professionals from around the world!
+              Pick a category from the drop down menu to get started with a
+              session from professionals from around the world!
             </Typography>
           </Container>
         </div>
+        {/* End hero unit */}
         <Container className={classes.cardGrid} maxWidth="lg">
-          {/* End hero unit */}
+          <Typography
+            component="h4"
+            variant="h4"
+            align="center"
+            color="textPrimary"
+            gutterBottom
+          >
+            Trending services
+          </Typography>
           <Grid container spacing={4}>
             {products.map(product => (
               <Grid item key={product.id} xs={12} sm={6} md={4}>
@@ -125,8 +135,7 @@ const AllProducts = props => {
                   />
                   <CardMedia
                     className={classes.media}
-                    image="/static/images/cards/paella.jpg"
-                    title="Paella dish"
+                    image={product.imageUrl}
                   />
                   <CardContent>
                     <Typography
@@ -138,9 +147,11 @@ const AllProducts = props => {
                     </Typography>
                   </CardContent>
                   <CardActions className={classes.cardActions}>
-                    <Button variant="contained" color="primary">
-                      Schedule
-                    </Button>
+                    <Link to={`/product/${product.id}`}>
+                      <Button variant="contained" color="primary">
+                        Schedule
+                      </Button>
+                    </Link>
                   </CardActions>
                 </Card>
               </Grid>
