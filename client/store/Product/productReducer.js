@@ -1,14 +1,8 @@
-import {combineReducers} from 'redux';
-import createProductReducer  from './subReducer/createProduct';
-import deleteProductReducer from './subReducer/deleteProduct'
-import singleProductReducer from './subReducer/getSingleProduct'
-import updateProductReducer from './subReducer/updateProduct';
-import getAllProductsReducer from './subReducer/getAllProducts'
+// import { combineReducers } from 'redux';
+// import singleProductReducer from './subReducer/singleProduct';
+// import allProductsReducer from './subReducer/allProducts';
 
-export default combineReducers({ 
-  createProductReducer, 
-  deleteProductReducer, 
-  singleProductReducer, 
-  updateProductReducer,
-  getAllProductsReducer,
-});
+// export default combineReducers({
+//   singleProductReducer,
+//   allProductsReducer,
+// });

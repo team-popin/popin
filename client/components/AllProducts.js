@@ -1,7 +1,7 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { connect, useSelector, useDispatch } from 'react-redux';
 // import { Link } from 'react-router-dom';
-import { fetchProducts } from '../store/Product/subReducer/getAllProducts';
+import { fetchProducts } from '../store/Product/subReducer/allProducts';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import CameraIcon from '@material-ui/icons/PhotoCamera';
@@ -51,14 +51,16 @@ const useStyles = makeStyles(theme => ({
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const AllProducts = props => {
-  // const [products, setProducts] = useState([]);
+  const products = useSelector(state => state.products);
+  const dispatch = useDispatch();
 
-  // useEffect(() => fetchProducts, []);
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
   const classes = useStyles();
-  // const products = this.props.products;
 
-  console.log(props);
+  console.log(products);
 
   return (
     <React.Fragment>
@@ -148,12 +150,4 @@ const AllProducts = props => {
   );
 };
 
-const mapState = ({ products }) => ({
-  products,
-});
-
-const mapDispatch = dispatch => ({
-  fetchProducts: () => dispatch(fetchProducts()),
-});
-
-export default connect(mapState, mapDispatch)(AllProducts);
+export default AllProducts;
