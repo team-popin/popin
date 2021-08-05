@@ -9,18 +9,18 @@ export const createUserThunk = (user, history) => {
     try {
       const { data } = await axios.post('/api/user', user);
       dispatch(createUser(user));
-      history.push("/login")
+      history.push('/login');
     } catch (e) {
       console.log(e);
     }
   };
 };
 
-export default createUserReducer = (state={}, action)=>{
-switch (action.type){
-  case CREATE_USER: 
-  return [...state, action.user]
-default: 
-return state;
-}
-}
+export default (state = {}, action) => {
+  switch (action.type) {
+    case CREATE_USER:
+      return [...state, action.user];
+    default:
+      return state;
+  }
+};
