@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, useEffect } from 'react-redux';
 import axios from 'axios';
 
 import Button from '@material-ui/core/Button';
@@ -21,16 +21,26 @@ const dummyCart = {
     { dateTime: "2021-08-10 10:30"  },
     { dateTime: "2021-08-10 11:00"},
     { dateTime: "2021-08-10 12:00"}
+  ],
+  7: [
+    { dateTime: "2021-08-10 11:00"},
+    { dateTime: "2021-08-10 12:00"}
   ]
 }
 
 export default function Cart() {
-  const cart = useSelector(state => state.cart);
+  const cart = dummyCart
+  // const cart = useSelector(state => state.cart);
   const dispatch = useDispatch();
 
   // const sortedCart = cart.map((productTimeSlot) =>{for (let i=0; i< cart.length; i++){
 
   // }))//Return an array of arrays that contain productTimeSlots grouped by their ProductId
+
+
+  // useEffect(() => {
+  //   dispatch(fetchProduct(id))
+  // })
 
   return (
     <div>
@@ -62,15 +72,15 @@ export default function Cart() {
         })
       } */}
 
-      {Object.keys(dummyCart).map((productId) => {
-        const productTimeSlots = dummyCart[productId];
+      {Object.keys(cart).map((productId) => {
+        const productTimeSlots = cart[productId];
         // const {data: product} = await axios.get(`/product/:${productId}`)
         //get request to get the product description and title by using cartInstance key
 
       return (
         <div>
-          {/* <h1>{product.name}</h1>
-          <p>{product.description}</p> */}
+          <h1>{productTimeSlots[0].product.name}</h1>
+          <p>{productTimeSlots[0].product.description}</p>
           {productTimeSlots.map((productTimeSlot) => {
             return(
               <p>{productTimeSlot.dateTime}</p>

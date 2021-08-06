@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { models: { ProductTimeSlot } } = require('../../db');
+const Product = require('../../db/models/Product');
 
 // POST /api/productTimeSlot/
 router.post('/', async (req, res, next) => {
@@ -19,7 +20,9 @@ router.post('/', async (req, res, next) => {
 // GET /api/productTimeSlot/:id
 router.get('/:id', async (req, res, next) => {
   try {
-    const productTimeSlot = await ProductTimeSlot.findByPk(req.params.id);
+    const productTimeSlot = await ProductTimeSlot.findByPk(req.params.id, {include: {
+      model: Product
+    }});
     res.json(productTimeSlot);
   }
   catch (err) {
