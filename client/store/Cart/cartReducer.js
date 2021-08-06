@@ -39,7 +39,7 @@ export const putCart = async (productTimeSlot) => {
         { orderId: order.id }
       );
 
-
+      // add the item to the redux store
       dispatch(addToCart(data));
     }
 
@@ -50,12 +50,14 @@ export const putCart = async (productTimeSlot) => {
   }
 };
 
-
 // cartReducer
-export default (state = [], action) => {
+export default (state = {}, action) => {
   switch (action.type) {
     case ADD_TO_CART:
-      return [...state, action.productTimeSlot];
+      //The keys in state are productIds. The values are arrays containing productTimeSlots whos productId is the key!
+      let newState = {...state};
+      newState[action.productTimeSlot.productId].push(action.productTimeSlot);
+      return newState;
     default:
       return state;
   }
