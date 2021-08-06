@@ -6,11 +6,13 @@ import user from './User/subReducer/user';
 // import products from './Product/productReducer';
 import products from './Product/subReducer/allProducts';
 import product from './Product/subReducer/singleProduct';
+import cart from './Cart/cartReducer';
 
-const reducer = combineReducers({ 
+const reducer = combineReducers({
   products,
   product,
-  user 
+  user,
+  cart
 });
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
