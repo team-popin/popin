@@ -30,6 +30,18 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+//GET /api/productTimeSlot
+router.get('/', async (req, res, next) => {
+  try {
+    res.send(await ProductTimeSlot.findAll({include: {
+      model: Product, where: {productId: req.params.id}
+    }}));
+  }
+  catch (err) {
+    next(err);
+  }
+});
+
 // PUT /api/productTimeSlot/:id
 router.put('/:id', async (req, res, next) => {
   try {
