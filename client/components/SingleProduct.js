@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
 // import { Link } from 'react-router-dom';
 import { fetchProduct } from "../store/Product/subReducer/singleProduct";
+import {fetchTimeSlots} from '../store/Product/subReducer/timeSlots';
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import CameraIcon from "@material-ui/icons/PhotoCamera";
@@ -60,10 +61,12 @@ const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const SingleProduct = (props) => {
   const product = useSelector((state) => state.product);
+  const timeSlots = useSelector(state => state.timeSlots);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchProduct(props.match.params.id));
+    dispatch(fetchTimeSlots(props.match.params.id))
   }, [dispatch]);
 
   const classes = useStyles();
@@ -81,6 +84,7 @@ const SingleProduct = (props) => {
         </Toolbar>
       </AppBar>
       <main>
+      <Grid >
         <Card className={classes.card}>
           <CardMedia
             className={classes.cardMedia}
@@ -109,6 +113,7 @@ const SingleProduct = (props) => {
             <Typography>Time slots</Typography>
         </CardContent>
         </Card>
+        </Grid >
       </main>
     </React.Fragment>
   );

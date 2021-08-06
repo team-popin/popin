@@ -6,13 +6,15 @@ import user from './User/subReducer/user';
 // import products from './Product/productReducer';
 import products from './Product/subReducer/allProducts';
 import product from './Product/subReducer/singleProduct';
+import timeSlots from './Product/subReducer/timeSlots';
 import cart from './Cart/cartReducer';
 
 const reducer = combineReducers({
   products,
   product,
   user,
-  cart
+  cart,
+  timeSlots,
 });
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
