@@ -1,6 +1,26 @@
 const router = require("express").Router();
 const { models: { Order }} = require('../../db');
 
+// query string handler
+router.get("/", async (req, res, next) => {
+  try {
+    const userId = req.query.userId;
+    const isPurchased = req.query.isPurchased;
+
+    const orders = await Order.findAll({
+      where: {
+        userId,
+        isPurchased
+      }
+    });
+    res.json(orders);
+  }
+  catch (err) {
+    next(err);
+  }
+})
+
+
 //get orders for an individual user
 router.get("/user/:id", async (req, res, next) => {
   try {
@@ -14,6 +34,7 @@ router.get("/user/:id", async (req, res, next) => {
     next(err);
   }
 });
+
 
 //get order by id
 router.get("/:id", async (req, res, next) => {
@@ -34,6 +55,18 @@ router.put('/:id', async (req, res, next) => {
       isPurchased: req.body.isPurchased
     });
     res.json(updatedOrder);
+  }
+  catch (err) {
+    next(err);
+  }
+});
+
+//post order
+router.post('/', async (req, res, next) => {
+  try {
+    const newOrder = await Order.create();
+    newOrder.setUser(req.body.userId);
+    res.json(newOrder);
   }
   catch (err) {
     next(err);
