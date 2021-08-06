@@ -20,7 +20,7 @@ export const fetchTimeSlots = id => {
 };
 
 // REDUCER
-export default function timeSlotsReducer(state = {}, action) {
+export default function timeSlotsReducer(state = [], action) {
   switch (action.type) {
     case GET_TIME_SLOTS:
       return action.timeslots;

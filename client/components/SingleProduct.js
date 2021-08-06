@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
 // import { Link } from 'react-router-dom';
 import { fetchProduct } from "../store/Product/subReducer/singleProduct";
-import {fetchTimeSlots} from '../store/Product/subReducer/timeSlots';
+import { fetchTimeSlots } from "../store/Product/subReducer/timeSlots";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import CameraIcon from "@material-ui/icons/PhotoCamera";
@@ -16,6 +16,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -61,17 +62,20 @@ const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const SingleProduct = (props) => {
   const product = useSelector((state) => state.product);
-  const timeSlots = useSelector(state => state.timeSlots);
+  const timeSlots = useSelector((state) => state.timeSlots);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchProduct(props.match.params.id));
-    dispatch(fetchTimeSlots(props.match.params.id))
+    dispatch(fetchTimeSlots(props.match.params.id));
   }, [dispatch]);
 
   const classes = useStyles();
 
   console.log(product);
+  console.log(timeSlots);
+  
+  // const filterTimeSlots
 
   return (
     <React.Fragment>
@@ -84,36 +88,52 @@ const SingleProduct = (props) => {
         </Toolbar>
       </AppBar>
       <main>
-      <Grid >
-        <Card className={classes.card}>
-          <CardMedia
-            className={classes.cardMedia}
-            image={product.imageUrl}
-            title="Image title"
-          />
-          <CardContent>
-            <Typography>{product.name}</Typography>
-            <Typography>{product.price} $</Typography>
-            {product.user ? (
-              <Typography>
-                {product.user.firstName} {product.user.lastName}
-              </Typography>
-            ) : (
-              <></>
-            )}
-          </CardContent>
-        </Card>
-        <Card className={classes.card1}>
-          <CardContent>
-            <Typography>{product.description}</Typography>
-          </CardContent>
-        </Card>
-        <Card className={classes.card1}>
-        <CardContent>
-            <Typography>Time slots</Typography>
-        </CardContent>
-        </Card>
-        </Grid >
+        <Grid>
+          <Card className={classes.card}>
+            <CardMedia
+              className={classes.cardMedia}
+              image={product.imageUrl}
+              title="Image title"
+            />
+            <CardContent>
+              <Typography>{product.name}</Typography>
+              <Typography>{product.price} $</Typography>
+              {product.user ? (
+                <Typography>
+                  {product.user.firstName} {product.user.lastName}
+                </Typography>
+              ) : (
+                <></>
+              )}
+            </CardContent>
+          </Card>
+          <Card className={classes.card1}>
+            <CardContent>
+              <Typography>{product.description}</Typography>
+            </CardContent>
+          </Card>
+          <Card className={classes.card1}>
+            <CardContent>
+
+            <TextField type="date" />
+            <TextField type="date" />
+              {timeSlots.map((timeSlot) => {
+                return (
+                  <Grid>
+                    
+                    <Button
+                      key={timeSlot.id}
+                      variant="contained"
+                      color="primary"
+                    >
+                      {timeSlot.dateTime.slice(11, 16)} {timeSlot.dateTime.slice(0, 10)}
+                    </Button>
+                  </Grid>
+                );
+              })}
+            </CardContent>
+          </Card>
+        </Grid>
       </main>
     </React.Fragment>
   );
