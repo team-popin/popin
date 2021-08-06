@@ -75,8 +75,6 @@ const AllProducts = () => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  console.log(products);
-
   return (
     <React.Fragment>
       <CssBaseline />
