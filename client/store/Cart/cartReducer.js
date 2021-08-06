@@ -25,7 +25,7 @@ export const putCart = async (productTimeSlot) => {
       });
       // then check if any associated order exists. If exists, simply get the order from server.
       let { data: order } = await axios.get(
-        `api/order/${user.id}?userId=${user.id}&isPurchased=false`
+        `api/order/?userId=${user.id}&isPurchased=false`
       );
       // if no existing order, create a new order for the user
       if (!order) {
