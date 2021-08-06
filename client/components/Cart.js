@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
+
 // dummy data
 const dummyCart = {
   1: [
@@ -78,7 +79,8 @@ export default function Cart() {
         //get request to get the product description and title by using cartInstance key
 
       return (
-        <div>
+
+        <div>{console.log(productTimeSlots)}
           <h1>{productTimeSlots[0].product.name}</h1>
           <p>{productTimeSlots[0].product.description}</p>
           {productTimeSlots.map((productTimeSlot) => {
