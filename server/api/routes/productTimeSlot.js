@@ -16,7 +16,6 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-
 // GET /api/productTimeSlot/:id
 router.get('/:id', async (req, res, next) => {
   try {
