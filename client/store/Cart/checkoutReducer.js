@@ -16,8 +16,9 @@ export const checkoutCartThunk = cart => {
   //if user is logged in, get their orderId
 
   return async dispatch => {
-    const token = window.localStorage.getItem('token');
+    const token = window.localStorage.getItem('token')
     //if a user is logged in
+
     if (token) {
       //then get user
       const { data: user } = await axios.get('/auth/me', {
@@ -28,9 +29,10 @@ export const checkoutCartThunk = cart => {
 
       //We know the user has an open order by this point, so we are going to change isPurchased to true!
       const { data: order } = await axios.put(
-        `api/order/?userId=${user.id}&isPurchased=false`,
+        `api/order/openOrder?userId=${user.id}`,
         { isPurchased: true }
       );
+      console.log("THUNK RUNNING")
       // add the item to the redux store
       dispatch(checkoutCart(order));
     }
