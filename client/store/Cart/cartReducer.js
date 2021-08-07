@@ -10,9 +10,10 @@ const addToCart = (productTimeSlot) => ({
 });
 
 // thunk creators
-export const putCart = async (productTimeSlot) => {
+export const putCart = (productTimeSlot) => {
   //if user is logged in, get their orderId
-
+  console.log(productTimeSlot);
+  console.log('putCart was called...');
   return async (dispatch) => {
     const token = window.localStorage.getItem("token");
     //if a user is logged in
@@ -58,7 +59,17 @@ export default (state = {}, action) => {
     case ADD_TO_CART:
       //The keys in state are productIds. The values are arrays containing productTimeSlots whos productId is the key!
       let newState = { ...state };
-      newState[action.productTimeSlot.productId].push(action.productTimeSlot);
+      console.log({state})
+      console.log({newState});
+      console.log("ACTION", action.productTimeSlot)
+      console.log(newState[action.productTimeSlot.productId]);
+      if (newState[action.productTimeSlot.productId])
+      {
+        newState[action.productTimeSlot.productId].push(action.productTimeSlot);
+      }
+      else {
+        newState[action.productTimeSlot.productId] = [action.productTimeSlot];
+      }
       return newState;
     default:
       return state;
