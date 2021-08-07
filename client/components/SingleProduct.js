@@ -3,6 +3,7 @@ import { connect, useSelector, useDispatch } from "react-redux";
 // import { Link } from 'react-router-dom';
 import { fetchProduct } from "../store/Product/subReducer/singleProduct";
 import { fetchTimeSlotsForDates } from "../store/Product/subReducer/timeSlots";
+import { putCart } from '../store/Cart/cartReducer';
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import CameraIcon from "@material-ui/icons/PhotoCamera";
@@ -147,6 +148,7 @@ const SingleProduct = (props) => {
                       key={timeSlot.id}
                       variant="contained"
                       color="primary"
+                      onClick={() => dispatch(putCart(timeSlot))}
                     >
                       {timeSlot.dateTime.slice(0, 10)} {timeSlot.dateTime.slice(11, 16)}
                     </Button>
