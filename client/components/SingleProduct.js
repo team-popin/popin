@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
-// import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { fetchProduct } from "../store/Product/subReducer/singleProduct";
 import { fetchTimeSlotsForDates } from "../store/Product/subReducer/timeSlots";
 import { putCart } from '../store/Cart/cartReducer';
@@ -18,6 +18,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import TextField from '@material-ui/core/TextField';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -57,6 +58,27 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
   },
+  cart: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  shoppingCartIconDiv: {
+    position: "relative",
+  },
+  shoppingCartIcon: {
+    cursor: "pointer"
+  },
+  shoppingCartItemNum: {
+    width: "20px",
+    height: "20px",
+    borderRadius: "50%",
+    backgroundColor: "red",
+    color: "white",
+    position: "absolute",
+    top: "-40%",
+    right: "-40%",
+    textAlign: "center"
+  },
 }));
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -65,8 +87,10 @@ const SingleProduct = (props) => {
   const classes = useStyles();
 
   const product = useSelector((state) => state.product);
+  const cart = useSelector(state => state.cart);
   const selectedTimeSlots = useSelector((state) => state.selectedTimeSlots);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const initialDates = {
     datePickerStart: '',
@@ -86,19 +110,27 @@ const SingleProduct = (props) => {
   const handleDatePicker = (e) => {
     const newDates = {...dates};
     newDates[e.target.name] = e.target.value;
-    console.log(newDates);
-
     setDates(newDates);
+  }
+
+  const getCartSize = () => {
+    return Object.values(cart).reduce((acc, value) => {
+        return acc + value.length;
+    }, 0);
   }
 
   return (
     <React.Fragment>
       <CssBaseline />
       <AppBar position="relative">
-        <Toolbar>
+        <Toolbar className={classes.cart}>
           <Typography variant="h6" color="inherit" noWrap>
             {product.name}
           </Typography>
+          <div className={classes.shoppingCartIconDiv}>
+            <ShoppingCartIcon className={classes.shoppingCartIcon} onClick={() => history.push('/cart')} />
+            <div className={classes.shoppingCartItemNum}>{getCartSize()}</div>
+          </div>
         </Toolbar>
       </AppBar>
       <main>
@@ -148,8 +180,7 @@ const SingleProduct = (props) => {
                       key={timeSlot.id}
                       variant="contained"
                       color="primary"
-                      onClick={() => dispatch(putCart(timeSlot))}
-                    >
+                      onClick={() => {dispatch(putCart(timeSlot))}}>
                       {timeSlot.dateTime.slice(0, 10)} {timeSlot.dateTime.slice(11, 16)}
                     </Button>
                   </Grid>
