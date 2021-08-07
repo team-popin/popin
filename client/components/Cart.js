@@ -14,11 +14,13 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import { useHistory } from "react-router-dom";
 
 // dummy data
 const dummyCart = {
   1: [
     {
+      id: 1,
       dateTime: "2021-08-10 10:00",
       product: {
         name: "blah",
@@ -26,6 +28,7 @@ const dummyCart = {
       },
     },
     {
+      id: 2,
       dateTime: "2021-08-10 10:30",
       product: {
         name: "blah",
@@ -33,6 +36,7 @@ const dummyCart = {
       },
     },
     {
+      id: 3,
       dateTime: "2021-08-10 11:00",
       product: {
         name: "blah",
@@ -40,6 +44,7 @@ const dummyCart = {
       },
     },
     {
+      id: 4,
       dateTime: "2021-08-10 12:00",
       product: {
         name: "blah",
@@ -49,6 +54,7 @@ const dummyCart = {
   ],
   7: [
     {
+      id: 5,
       dateTime: "2021-08-10 11:00",
       product: {
         name: "blah",
@@ -56,6 +62,7 @@ const dummyCart = {
       },
     },
     {
+      id: 6,
       dateTime: "2021-08-10 12:00",
       product: {
         name: "blah",
@@ -69,6 +76,7 @@ export default function Cart() {
   const cart = dummyCart;
   // const cart = useSelector(state => state.cart);
   const dispatch = useDispatch();
+  let history = useHistory()
 
   // const sortedCart = cart.map((productTimeSlot) =>{for (let i=0; i< cart.length; i++){
 
@@ -114,12 +122,12 @@ export default function Cart() {
         //get request to get the product description and title by using cartInstance key
 
         return (
-          <div>
+          <div key={productId}>
             {/* {console.log(productTimeSlots)} */}
             <h1>{productTimeSlots[0].product.name}</h1>
             <p>{productTimeSlots[0].product.description}</p>
             {productTimeSlots.map((productTimeSlot) => {
-              return <p>{productTimeSlot.dateTime}</p>;
+              return <p key={productTimeSlot.id}>{productTimeSlot.dateTime}</p>;
             })}
           </div>
         );
@@ -132,6 +140,7 @@ export default function Cart() {
           dispatch(checkoutCartThunk(cart))
           // console.log("onclick is running whooo!!!")
           // console.log("THIS IS THE CART", cart)
+          history.push('/ordersuccessful')
         }}
       >
         Checkout Cart

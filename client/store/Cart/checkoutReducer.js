@@ -32,47 +32,52 @@ export const checkoutCartThunk = cart => {
         `api/order/openOrder?userId=${user.id}`,
         { isPurchased: true }
       );
-      console.log("THUNK RUNNING")
+      // console.log("THUNK RUNNING")
       // add the item to the redux store
       dispatch(checkoutCart(order));
     }
 
     //If a user is not logged in, lets create a new order for them now and associate the items in the redux store cart with the order
     else {
-      const { data: order } = await axios.post('api/order');
 
+      const { data: order } = await axios.post('api/order');
+      // console.log("THUNK RUNNING")
+      // console.log(order)
       //Associate all of the productTimeSlots on the redux store cart with this order
       //First, we must flatten the cart object into an array containing just the productTimeSlots
       const productTimeSlots2DArray = Object.keys(cart).map(key => {
         //map function returns array cointain our values from the object (which are arrays themselves)
-
+        // console.log("mapping!!!")
         return cart[key]; //an array of productTimeSlots
       });
-
+      // console.log(productTimeSlots2DArray)
       //This is a flattened array, containing the productTimeSlots (which are objects)
       const productTimeSlotsFlattened = [];
 
       for (let i = 0; i < productTimeSlots2DArray.length; i++) {
         productTimeSlotsFlattened.push(...productTimeSlots2DArray[i]);
 
-        productTimeSlotsFlattened = [
-          ...productTimeSlotsFlattened,
-          ...productTimeSlots2DArray[i],
-        ];
+        // productTimeSlotsFlattened = [
+        //   ...productTimeSlotsFlattened,
+        //   ...productTimeSlots2DArray[i],
+        // ];
       }
-
+      // console.log("FLATTEND ARRAY>>>>", productTimeSlotsFlattened)
       //Finally, on our flattened array, we associate each productTimeSlot with the orderId
       productTimeSlotsFlattened.map(async productTimeSlot => {
         const { data } = await axios.put(
           `/api/productTimeSlot/${productTimeSlot.id}`,
           { orderId: order.id }
         );
+        // console.log(data)
       });
 
       //Change isPurchased in the order to true
       const { data: updatedOrder } = await axios.put(`api/order/${order.id}`, {
         isPurchased: true,
       });
+
+      console.log(updatedOrder)
 
       dispatch(checkoutCart(updatedOrder));
     }
