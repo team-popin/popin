@@ -35,6 +35,16 @@ router.get("/user/:id", async (req, res, next) => {
   }
 });
 
+//Get open order 'api/order/open_order?userId=3'
+router.get('/openOrder', async (req, res, next) => {
+  try {
+    const order = await Order.findOne({where: {userId: req.query.userId, isPurchased: false}});
+    res.json(order);
+  }
+  catch (err) {
+    next(err);
+  }
+});
 
 //get order by id
 router.get("/:id", async (req, res, next) => {
@@ -46,8 +56,21 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-
 //put order
+router.put('/openOrder', async (req, res, next) => {
+  try {
+    const order = await Order.findOne({where: {userId: req.query.userId, isPurchased: false}});
+    const updatedOrder = await order.update({
+      isPurchased: req.body.isPurchased
+    });
+    res.json(updatedOrder);
+  }
+  catch (err) {
+    next(err);
+  }
+});
+
+//put order by id
 router.put('/:id', async (req, res, next) => {
   try {
     const order = await Order.findByPk(req.params.id);
@@ -60,6 +83,8 @@ router.put('/:id', async (req, res, next) => {
     next(err);
   }
 });
+
+
 
 //post order
 router.post('/', async (req, res, next) => {
