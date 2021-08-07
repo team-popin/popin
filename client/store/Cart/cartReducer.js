@@ -10,10 +10,8 @@ const addToCart = (productTimeSlot) => ({
 });
 
 // thunk creators
-export const putCart = (productTimeSlot) => {
+export const putCart = (timeSlot) => {
   //if user is logged in, get their orderId
-  console.log(productTimeSlot);
-  console.log('putCart was called...');
   return async (dispatch) => {
     const token = window.localStorage.getItem("token");
     //if a user is logged in
@@ -37,39 +35,60 @@ export const putCart = (productTimeSlot) => {
       }
 
       // then update the productTimeSlot with the orderId
-      const { data } = await axios.put(
-        `/api/productTimeSlot/${productTimeSlot.id}`,
+      const { data: productTimeSlot } = await axios.put(
+        `/api/productTimeSlot/${timeSlot.id}`,
         { orderId: order.id }
       );
 
       // add the item to the redux store
-      dispatch(addToCart(data));
+      let localCart = window.localStorage.getItem('cart');
+      if (!localCart) {
+        window.localStorage.setItem('cart', '{}');
+        localCart = window.localStorage.getItem('cart');
+      }
+      const cart = JSON.parse(localCart);
+      if (cart[productTimeSlot.productId])
+      {
+        cart[productTimeSlot.productId].push(productTimeSlot);
+      }
+      else {
+        cart[productTimeSlot.productId] = [productTimeSlot];
+      }
+      window.localStorage.setItem('cart', JSON.stringify(cart));
+      dispatch(addToCart(productTimeSlot));
     }
 
-    //if a user is not logged in, just add the item to the redux store (we'll create an order for non-logged-in users when they checkout):
+    //if a user is not logged in, just add the item to the session storage/redux store (we'll create an order for non-logged-in users when they checkout):
     else {
-      dispatch(addToCart(productTimeSlot));
+      let localCart = window.localStorage.getItem('cart');
+      if (!localCart) {
+        window.localStorage.setItem('cart', '{}');
+        localCart = window.localStorage.getItem('cart');
+      }
+      const cart = JSON.parse(localCart);
+      if (cart[timeSlot.productId])
+      {
+        cart[timeSlot.productId].push(timeSlot);
+      }
+      else {
+        cart[timeSlot.productId] = [timeSlot];
+      }
+      window.localStorage.setItem('cart', JSON.stringify(cart));
+      dispatch(addToCart(timeSlot));
     }
   };
 };
 
 // cartReducer
-export default (state = {}, action) => {
+const initialCart = window.localStorage.getItem('cart') || '{}';
+const initialState = JSON.parse(initialCart);
+
+export default (state = initialState, action) => {
   switch (action.type) {
     case ADD_TO_CART:
       //The keys in state are productIds. The values are arrays containing productTimeSlots whos productId is the key!
-      let newState = { ...state };
-      console.log({state})
-      console.log({newState});
-      console.log("ACTION", action.productTimeSlot)
-      console.log(newState[action.productTimeSlot.productId]);
-      if (newState[action.productTimeSlot.productId])
-      {
-        newState[action.productTimeSlot.productId].push(action.productTimeSlot);
-      }
-      else {
-        newState[action.productTimeSlot.productId] = [action.productTimeSlot];
-      }
+      const newCart = window.localStorage.getItem('cart') || '{}';
+      const newState = JSON.parse(newCart);
       return newState;
     default:
       return state;
