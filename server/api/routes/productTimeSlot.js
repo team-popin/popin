@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { models: { ProductTimeSlot } } = require('../../db');
+const {Op} = require('sequelize');
 const Product = require('../../db/models/Product');
 
 // POST /api/productTimeSlot/
@@ -11,6 +12,27 @@ router.post('/', async (req, res, next) => {
     newTimeSlot.setProduct(req.body.productId);
       // We should make sure that a user can only add a new timeslot to their own products, referencing their own productId's
     res.json(newTimeSlot);
+  }
+  catch (err) {
+    next(err);
+  }
+});
+
+//GET /api/productTimeSlot
+router.get('/', async (req, res, next) => {
+  try {
+    res.send(await ProductTimeSlot.findAll({
+      where: {
+        dateTime: {
+          [Op.and]: [
+           { [Op.gte]: req.query.startDate},
+           { [Op.lte]: req.query.endDate},
+          ]
+        },
+        productId: req.query.productId,
+        orderId: null,
+      }, include: Product
+    }));
   }
   catch (err) {
     next(err);
@@ -29,6 +51,7 @@ router.get('/:id', async (req, res, next) => {
     next(err);
   }
 });
+
 
 // PUT /api/productTimeSlot/:id
 router.put('/:id', async (req, res, next) => {

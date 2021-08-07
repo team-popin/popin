@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
-// import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { fetchProduct } from "../store/Product/subReducer/singleProduct";
+import { fetchTimeSlotsForDates } from "../store/Product/subReducer/timeSlots";
+import { putCart } from '../store/Cart/cartReducer';
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import CameraIcon from "@material-ui/icons/PhotoCamera";
@@ -15,6 +17,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import TextField from '@material-ui/core/TextField';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -54,61 +58,139 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
   },
+  cart: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  shoppingCartIconDiv: {
+    position: "relative",
+  },
+  shoppingCartIcon: {
+    cursor: "pointer"
+  },
+  shoppingCartItemNum: {
+    width: "20px",
+    height: "20px",
+    borderRadius: "50%",
+    backgroundColor: "red",
+    color: "white",
+    position: "absolute",
+    top: "-40%",
+    right: "-40%",
+    textAlign: "center"
+  },
 }));
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const SingleProduct = (props) => {
+  const classes = useStyles();
+
   const product = useSelector((state) => state.product);
+  const cart = useSelector(state => state.cart);
+  const selectedTimeSlots = useSelector((state) => state.selectedTimeSlots);
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  const initialDates = {
+    datePickerStart: '',
+    datePickerEnd: ''
+  }
+
+  const [dates, setDates] = useState(initialDates);
 
   useEffect(() => {
     dispatch(fetchProduct(props.match.params.id));
   }, [dispatch]);
 
-  const classes = useStyles();
+  const getTimeSlotsForDates = (id, datePickerStart, datePickerEnd) => {
+    dispatch(fetchTimeSlotsForDates(id, datePickerStart, datePickerEnd));
+  }
 
-  console.log(product);
+  const handleDatePicker = (e) => {
+    const newDates = {...dates};
+    newDates[e.target.name] = e.target.value;
+    setDates(newDates);
+  }
+
+  const getCartSize = () => {
+    return Object.values(cart).reduce((acc, value) => {
+        return acc + value.length;
+    }, 0);
+  }
 
   return (
     <React.Fragment>
       <CssBaseline />
       <AppBar position="relative">
-        <Toolbar>
+        <Toolbar className={classes.cart}>
           <Typography variant="h6" color="inherit" noWrap>
             {product.name}
           </Typography>
+          <div className={classes.shoppingCartIconDiv}>
+            <ShoppingCartIcon className={classes.shoppingCartIcon} onClick={() => history.push('/cart')} />
+            <div className={classes.shoppingCartItemNum}>{getCartSize()}</div>
+          </div>
         </Toolbar>
       </AppBar>
       <main>
-        <Card className={classes.card}>
-          <CardMedia
-            className={classes.cardMedia}
-            image={product.imageUrl}
-            title="Image title"
-          />
-          <CardContent>
-            <Typography>{product.name}</Typography>
-            <Typography>{product.price} $</Typography>
-            {product.user ? (
-              <Typography>
-                {product.user.firstName} {product.user.lastName}
-              </Typography>
-            ) : (
-              <></>
-            )}
-          </CardContent>
-        </Card>
-        <Card className={classes.card1}>
-          <CardContent>
-            <Typography>{product.description}</Typography>
-          </CardContent>
-        </Card>
-        <Card className={classes.card1}>
-        <CardContent>
-            <Typography>Time slots</Typography>
-        </CardContent>
-        </Card>
+        <Grid>
+          <Card className={classes.card}>
+            <CardMedia
+              className={classes.cardMedia}
+              image={product.imageUrl}
+              title="Image title"
+            />
+            <CardContent>
+              <Typography>{product.name}</Typography>
+              <Typography>{product.price} $</Typography>
+              {product.user ? (
+                <Typography>
+                  {product.user.firstName} {product.user.lastName}
+                </Typography>
+              ) : (
+                <></>
+              )}
+            </CardContent>
+          </Card>
+          <Card className={classes.card1}>
+            <CardContent>
+              <Typography>{product.description}</Typography>
+            </CardContent>
+          </Card>
+          <Card className={classes.card1}>
+            <CardContent>
+            <Typography>
+              {`Time Slots for ${product.name}`}
+            </Typography>
+            <TextField type="date" name="datePickerStart" value={dates.datePickerStart} onChange={(e) => handleDatePicker(e)}/>
+            <TextField type="date" name="datePickerEnd" value={dates.datePickerEnd} onChange={(e) => handleDatePicker(e)}/>
+            {
+            (dates.datePickerStart.length > 0 && dates.datePickerEnd.length > 0 && dates.datePickerStart <= dates.datePickerEnd)
+            ? <Button variant="contained" color="secondary" onClick={() => getTimeSlotsForDates(product.id, dates.datePickerStart, dates.datePickerEnd)}>
+              Get Time Slots
+            </Button>
+            : <Typography style={{color:"red"}} >Plese select correct dates</Typography>}
+            <Grid>
+              {(dates.datePickerStart && dates.datePickerEnd && selectedTimeSlots.length!==0)
+              ? selectedTimeSlots.map ((timeSlot) => {
+                return (
+                  <Grid key={timeSlot.id}>
+                    <Button
+                      key={timeSlot.id}
+                      variant="contained"
+                      color="primary"
+                      onClick={() => {dispatch(putCart(timeSlot))}}>
+                      {timeSlot.dateTime.slice(0, 10)} {timeSlot.dateTime.slice(11, 16)}
+                    </Button>
+                  </Grid>
+                )
+              })
+              : <Typography>Please select the date range to see available time slots.</Typography>}
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
       </main>
     </React.Fragment>
   );

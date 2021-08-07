@@ -65,17 +65,9 @@ const dummyCart = {
 };
 
 export default function Cart() {
-  const cart = dummyCart;
-  // const cart = useSelector(state => state.cart);
+  // const cart = dummyCart
+  const cart = useSelector(state => state.cart);
   const dispatch = useDispatch();
-
-  // const sortedCart = cart.map((productTimeSlot) =>{for (let i=0; i< cart.length; i++){
-
-  // }))//Return an array of arrays that contain productTimeSlots grouped by their ProductId
-
-  // useEffect(() => {
-  //   dispatch(fetchProduct(id))
-  // })
 
   return (
     <div>
@@ -89,39 +81,21 @@ export default function Cart() {
         Your Cart
       </Typography>
 
-      {/* This is a good place to map over the items in the cart to display them*/}
-
-      {/* {
-        [1, 2, 3].map(num => {
-          return (
-            <p>{num}</p>
-          )
-        })
-      } */}
-
-      {/* {
-        Object.keys(dummyCart).map(num => {
-          return (
-            <p>{num}</p>
-          )
-        })
-      } */}
-
-      {Object.keys(cart).map(productId => {
+      {Object.keys(cart).map((productId) => {
         const productTimeSlots = cart[productId];
-        // const {data: product} = await axios.get(`/product/:${productId}`)
-        //get request to get the product description and title by using cartInstance key
 
-        return (
-          <div>
-            {console.log(productTimeSlots)}
-            <h1>{productTimeSlots[0].product.name}</h1>
-            <p>{productTimeSlots[0].product.description}</p>
-            {productTimeSlots.map(productTimeSlot => {
-              return <p>{productTimeSlot.dateTime}</p>;
-            })}
-          </div>
-        );
+      return (
+
+        <div key={productId}>{console.log(productTimeSlots)}
+          <h1>{productTimeSlots[0].product.name}</h1>
+          <p>{productTimeSlots[0].product.description}</p>
+          {productTimeSlots.map((productTimeSlot) => {
+            return(
+              <p key={productTimeSlot.id}>{productTimeSlot.dateTime}</p>
+            )
+          })}
+        </div>
+      )
       })}
     </div>
   );
