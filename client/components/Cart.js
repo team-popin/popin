@@ -14,44 +14,55 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-
 // dummy data
 const dummyCart = {
   1: [
-    { dateTime: "2021-08-10 10:00",
-    product: {
-      name: 'blah',
-      description: 'blahblajfieowja fjeioa fo jife joiwe jf'
-    }},
-    { dateTime: "2021-08-10 10:30",
-    product: {
-      name: 'blah',
-      description: 'blahblajfieowja fjeioa fo jife joiwe jf'
-    }  },
-    { dateTime: "2021-08-10 11:00",
-    product: {
-      name: 'blah',
-      description: 'blahblajfieowja fjeioa fo jife joiwe jf'
-    }},
-    { dateTime: "2021-08-10 12:00",
-    product: {
-      name: 'blah',
-      description: 'blahblajfieowja fjeioa fo jife joiwe jf'
-    }}
+    {
+      dateTime: '2021-08-10 10:00',
+      product: {
+        name: 'blah',
+        description: 'blahblajfieowja fjeioa fo jife joiwe jf',
+      },
+    },
+    {
+      dateTime: '2021-08-10 10:30',
+      product: {
+        name: 'blah',
+        description: 'blahblajfieowja fjeioa fo jife joiwe jf',
+      },
+    },
+    {
+      dateTime: '2021-08-10 11:00',
+      product: {
+        name: 'blah',
+        description: 'blahblajfieowja fjeioa fo jife joiwe jf',
+      },
+    },
+    {
+      dateTime: '2021-08-10 12:00',
+      product: {
+        name: 'blah',
+        description: 'blahblajfieowja fjeioa fo jife joiwe jf',
+      },
+    },
   ],
   7: [
-    { dateTime: "2021-08-10 11:00",
-    product: {
-      name: 'blah',
-      description: 'blahblajfieowja fjeioa fo jife joiwe jf'
-    }},
-    { dateTime: "2021-08-10 12:00",
-    product: {
-      name: 'blah',
-      description: 'blahblajfieowja fjeioa fo jife joiwe jf'
-    }}
-  ]
-}
+    {
+      dateTime: '2021-08-10 11:00',
+      product: {
+        name: 'blah',
+        description: 'blahblajfieowja fjeioa fo jife joiwe jf',
+      },
+    },
+    {
+      dateTime: '2021-08-10 12:00',
+      product: {
+        name: 'blah',
+        description: 'blahblajfieowja fjeioa fo jife joiwe jf',
+      },
+    },
+  ],
+};
 
 export default function Cart() {
   // const cart = dummyCart
@@ -87,7 +98,6 @@ export default function Cart() {
       )
       })}
     </div>
-  )
+  );
 }
-
-
+// button onclick handler --> call checkoutCartThunk(cart) <-- these are the productTimeSlots getting passed to the checkoutCartThunk
