@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { models: { ProductTimeSlot } } = require('../../db');
+const {Op} = require('sequelize');
 const Product = require('../../db/models/Product');
 
 // POST /api/productTimeSlot/
@@ -22,8 +23,15 @@ router.get('/', async (req, res, next) => {
   try {
     res.send(await ProductTimeSlot.findAll({
       where: {
-        productId: req.query.productId
-      }
+        dateTime: {
+          [Op.and]: [
+           { [Op.gte]: req.query.startDate},
+           { [Op.lte]: req.query.endDate},
+          ]
+        },
+        productId: req.query.productId,
+        orderId: null,
+      }, include: Product
     }));
   }
   catch (err) {
