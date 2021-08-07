@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
 // import { Link } from 'react-router-dom';
 import { fetchProduct } from "../store/Product/subReducer/singleProduct";
-import { fetchTimeSlots } from "../store/Product/subReducer/timeSlots";
+import { fetchTimeSlotsForDates } from "../store/Product/subReducer/timeSlots";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import CameraIcon from "@material-ui/icons/PhotoCamera";
@@ -61,21 +61,34 @@ const useStyles = makeStyles((theme) => ({
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const SingleProduct = (props) => {
+  const classes = useStyles();
+
   const product = useSelector((state) => state.product);
-  const timeSlots = useSelector((state) => state.timeSlots);
+  const selectedTimeSlots = useSelector((state) => state.selectedTimeSlots);
   const dispatch = useDispatch();
+
+  const initialDates = {
+    datePickerStart: '',
+    datePickerEnd: ''
+  }
+
+  const [dates, setDates] = useState(initialDates);
 
   useEffect(() => {
     dispatch(fetchProduct(props.match.params.id));
-    dispatch(fetchTimeSlots(props.match.params.id));
   }, [dispatch]);
 
-  const classes = useStyles();
+  const getTimeSlotsForDates = (id, datePickerStart, datePickerEnd) => {
+    dispatch(fetchTimeSlotsForDates(id, datePickerStart, datePickerEnd));
+  }
 
-  console.log(product);
-  console.log(timeSlots);
-  
-  // const filterTimeSlots
+  const handleDatePicker = (e) => {
+    const newDates = {...dates};
+    newDates[e.target.name] = e.target.value;
+    console.log(newDates);
+
+    setDates(newDates);
+  }
 
   return (
     <React.Fragment>
@@ -114,23 +127,34 @@ const SingleProduct = (props) => {
           </Card>
           <Card className={classes.card1}>
             <CardContent>
-
-            <TextField type="date" />
-            <TextField type="date" />
-              {timeSlots.map((timeSlot) => {
+            <Typography>
+              {`Time Slots for ${product.name}`}
+            </Typography>
+            <TextField type="date" name="datePickerStart" value={dates.datePickerStart} onChange={(e) => handleDatePicker(e)}/>
+            <TextField type="date" name="datePickerEnd" value={dates.datePickerEnd} onChange={(e) => handleDatePicker(e)}/>
+            {
+            (dates.datePickerStart.length > 0 && dates.datePickerEnd.length > 0 && dates.datePickerStart <= dates.datePickerEnd)
+            ? <Button variant="contained" color="secondary" onClick={() => getTimeSlotsForDates(product.id, dates.datePickerStart, dates.datePickerEnd)}>
+              Get Time Slots
+            </Button>
+            : <Typography style={{color:"red"}} >Plese select correct dates</Typography>}
+            <Grid>
+              {(dates.datePickerStart && dates.datePickerEnd && selectedTimeSlots.length!==0)
+              ? selectedTimeSlots.map ((timeSlot) => {
                 return (
-                  <Grid>
-                    
+                  <Grid key={timeSlot.id}>
                     <Button
                       key={timeSlot.id}
                       variant="contained"
                       color="primary"
                     >
-                      {timeSlot.dateTime.slice(11, 16)} {timeSlot.dateTime.slice(0, 10)}
+                      {timeSlot.dateTime.slice(0, 10)} {timeSlot.dateTime.slice(11, 16)}
                     </Button>
                   </Grid>
-                );
-              })}
+                )
+              })
+              : <Typography>Please select the date range to see available time slots.</Typography>}
+              </Grid>
             </CardContent>
           </Card>
         </Grid>
