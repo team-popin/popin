@@ -6,6 +6,7 @@ import { me } from './store';
 import AllProducts from './components/AllProducts';
 import Cart from './components/Cart';
 import SingleProduct from './components/SingleProduct';
+import OrderSuccessful from './components/OrderSuccessful';
 
 /**
  * COMPONENT
@@ -27,14 +28,17 @@ class Routes extends Component {
           <Route path="/cart" component={Cart} />
           <Route path="/product/:id" component={SingleProduct} />
           <Route path="/product" component={AllProducts} />
+          <Route path="/ordersuccessful" component={OrderSuccessful} />
         </Switch>
         ) : (
           <Switch>
             <Route path="/" exact component={SignIn} />
             <Route path="/login" component={SignIn} />
-          <Route path="/product/:id" component={SingleProduct} />
+            <Route path="/product/:id" component={SingleProduct} />
             <Route path="/product" component={AllProducts} />
             <Route path="/cart" component={Cart} />
+            <Route path="/ordersuccessful" component={OrderSuccessful} />
+
           </Switch>
         )}
       </div>
