@@ -56,12 +56,15 @@ router.get('/:id', async (req, res, next) => {
 // PUT /api/productTimeSlot/:id
 router.put('/:id', async (req, res, next) => {
   try {
-    const productTimeSlot = await ProductTimeSlot.findByPk(req.params.id);
+    const productTimeSlot = await ProductTimeSlot.findByPk(req.params.id,  {include: {
+      model: Product
+    }});
     const updatedProductTimeSlot = await productTimeSlot.update({
       dateTime: req.body.dateTime || productTimeSlot.dateTime,
       productId: req.body.productId || productTimeSlot.productId,
-      orderId: req.body.orderId || productTimeSlot.orderId
+      orderId: req.body.orderId
     });
+    //orderId: req.body.orderId || productTimeSlot.orderId
     res.json(updatedProductTimeSlot);
   }
   catch (err) {

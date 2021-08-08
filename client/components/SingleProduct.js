@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import { fetchProduct } from "../store/Product/subReducer/singleProduct";
 import { fetchTimeSlotsForDates } from "../store/Product/subReducer/timeSlots";
-import { putCart } from '../store/Cart/cartReducer';
+import { putCart } from "../store/Cart/cartReducer";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import CameraIcon from "@material-ui/icons/PhotoCamera";
@@ -17,8 +17,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import TextField from '@material-ui/core/TextField';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import TextField from "@material-ui/core/TextField";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
   },
   shoppingCartIcon: {
-    cursor: "pointer"
+    cursor: "pointer",
   },
   shoppingCartItemNum: {
     width: "20px",
@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     top: "-40%",
     right: "-40%",
-    textAlign: "center"
+    textAlign: "center",
   },
 }));
 
@@ -87,16 +87,18 @@ const SingleProduct = (props) => {
   const classes = useStyles();
 
   const product = useSelector((state) => state.product);
-  const cart = useSelector(state => state.cart);
-  const selectedTimeSlots = useSelector((state) => state.selectedTimeSlots);
+  const cart = useSelector((state) => state.cart);
+  let selectedTimeSlots = useSelector((state) => state.selectedTimeSlots);
   const dispatch = useDispatch();
   const history = useHistory();
+  const [isClicked, setIsClicked] = useState(false);
 
   const initialDates = {
-    datePickerStart: '',
-    datePickerEnd: ''
-  }
+    datePickerStart: "",
+    datePickerEnd: "",
+  };
 
+  const inititialSelectedTimeSlots = {};
   const [dates, setDates] = useState(initialDates);
 
   useEffect(() => {
@@ -105,24 +107,27 @@ const SingleProduct = (props) => {
 
   const getTimeSlotsForDates = (id, datePickerStart, datePickerEnd) => {
     dispatch(fetchTimeSlotsForDates(id, datePickerStart, datePickerEnd));
-  }
+  };
+
+  const handleGoBackClick = () => {
+    history.push("/product");
+  };
 
   const handleDatePicker = (e) => {
-    const newDates = {...dates};
+    const newDates = { ...dates };
     newDates[e.target.name] = e.target.value;
     setDates(newDates);
-  }
+  };
 
   const getCartSize = () => {
     return Object.values(cart).reduce((acc, value) => {
-        return acc + value.length;
+      return acc + value.length;
     }, 0);
-  }
-
+  };
   return (
     <React.Fragment>
       <CssBaseline />
-      <AppBar position="relative">
+      {/* <AppBar position="relative">
         <Toolbar className={classes.cart}>
           <Typography variant="h6" color="inherit" noWrap>
             {product.name}
@@ -132,7 +137,7 @@ const SingleProduct = (props) => {
             <div className={classes.shoppingCartItemNum}>{getCartSize()}</div>
           </div>
         </Toolbar>
-      </AppBar>
+      </AppBar> */}
       <main>
         <Grid>
           <Card className={classes.card}>
@@ -160,34 +165,91 @@ const SingleProduct = (props) => {
           </Card>
           <Card className={classes.card1}>
             <CardContent>
-            <Typography>
-              {`Time Slots for ${product.name}`}
-            </Typography>
-            <TextField type="date" name="datePickerStart" value={dates.datePickerStart} onChange={(e) => handleDatePicker(e)}/>
-            <TextField type="date" name="datePickerEnd" value={dates.datePickerEnd} onChange={(e) => handleDatePicker(e)}/>
-            {
-            (dates.datePickerStart.length > 0 && dates.datePickerEnd.length > 0 && dates.datePickerStart <= dates.datePickerEnd)
-            ? <Button variant="contained" color="secondary" onClick={() => getTimeSlotsForDates(product.id, dates.datePickerStart, dates.datePickerEnd)}>
-              Get Time Slots
-            </Button>
-            : <Typography style={{color:"red"}} >Plese select correct dates</Typography>}
-            <Grid>
-              {(dates.datePickerStart && dates.datePickerEnd && selectedTimeSlots.length!==0)
-              ? selectedTimeSlots.map ((timeSlot) => {
-                return (
-                  <Grid key={timeSlot.id}>
-                    <Button
-                      key={timeSlot.id}
-                      variant="contained"
-                      color="primary"
-                      onClick={() => {dispatch(putCart(timeSlot))}}>
-                      {timeSlot.dateTime.slice(0, 10)} {timeSlot.dateTime.slice(11, 16)}
-                    </Button>
+              <Typography>{`Time Slots for ${product.name}`}</Typography>
+              <TextField
+                type="date"
+                name="datePickerStart"
+                value={dates.datePickerStart}
+                onChange={(e) => handleDatePicker(e)}
+              />
+              <TextField
+                type="date"
+                name="datePickerEnd"
+                value={dates.datePickerEnd}
+                onChange={(e) => handleDatePicker(e)}
+              />
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => {
+                  getTimeSlotsForDates(
+                    product.id,
+                    dates.datePickerStart,
+                    dates.datePickerEnd
+                  );
+                  setIsClicked(true);
+                }}
+              >
+                Get Time Slots
+              </Button>
+              {dates.datePickerStart.length > 0 &&
+              dates.datePickerEnd.length > 0 &&
+              dates.datePickerStart <= dates.datePickerEnd &&
+              isClicked === true ? (
+                <>
+                  <Grid>
+                    {dates.datePickerStart &&
+                    dates.datePickerEnd &&
+                    selectedTimeSlots.length !== 0 ? (
+                      selectedTimeSlots.map((timeSlot) => {
+
+                        const timeSlotInCart = () => {
+                          for (let i in cart[product.id]) {
+                            if (cart[product.id][i].id === timeSlot.id) {
+                              return false;
+                            }
+                          }
+
+                          return true;
+                        };
+
+                        if (timeSlotInCart()) {
+                          console.log(timeSlotInCart());
+                          return (
+                            <Grid key={timeSlot.id}>
+                              <Button
+                                key={timeSlot.id}
+                                variant="contained"
+                                color="primary"
+                                onClick={() => {
+                                  dispatch(putCart(timeSlot));
+                                  getTimeSlotsForDates(
+                                    product.id,
+                                    dates.datePickerStart,
+                                    dates.datePickerEnd
+                                  );
+                                }}
+                              >
+                                {timeSlot.dateTime.slice(0, 10)}{" "}
+                                {timeSlot.dateTime.slice(11, 16)}
+                              </Button>
+                            </Grid>
+                          );
+                        }
+                      })
+                    ) : (
+                      <Typography>
+                        Please select the date range to see available time
+                        slots.
+                      </Typography>
+                    )}
                   </Grid>
-                )
-              })
-              : <Typography>Please select the date range to see available time slots.</Typography>}
-              </Grid>
+                </>
+              ) : (
+                <Typography style={{ color: "red" }}>
+                  Plese select correct dates
+                </Typography>
+              )}
             </CardContent>
           </Card>
         </Grid>

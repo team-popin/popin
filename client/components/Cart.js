@@ -15,6 +15,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useHistory } from "react-router-dom";
+import { removeItemFromCart } from "../store/Cart/cartReducer";
 
 // dummy data
 const dummyCart = {
@@ -89,18 +90,22 @@ export default function Cart() {
       >
         Your Cart
       </Typography>
-
+{console.log("CART STATE", cart)}
       {Object.keys(cart).map((productId) => {
         const productTimeSlots = cart[productId];
 
       return (
 
         <div key={productId}>{console.log(productTimeSlots)}
-          <h1>{productTimeSlots[0].product.name}</h1>
-          <p>{productTimeSlots[0].product.description}</p>
+          {/* <h1>{productTimeSlots[0].product.name}</h1>
+          <p>{productTimeSlots[0].product.description}</p> */}
+          <Button onClick={()=>history.push(`/product/${productTimeSlots[0].product.id}`)}>Add More Time Slots</Button>
           {productTimeSlots.map((productTimeSlot) => {
             return(
-              <p key={productTimeSlot.id}>{productTimeSlot.dateTime}</p>
+              <div key={productTimeSlot.id}>
+              <p>{productTimeSlot.dateTime.slice(0,10)} {productTimeSlot.dateTime.slice(11,16)}</p>
+              <Button  onClick={()=>dispatch(removeItemFromCart(productTimeSlot))}>Remove</Button>
+              </div>
             )
           })}
         </div>

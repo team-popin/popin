@@ -39,10 +39,12 @@ export const authenticate = (email, password, method) => async (dispatch) => {
 
 export const logout = () => {
   window.localStorage.removeItem(TOKEN);
+  window.localStorage.removeItem("cart")
   history.push("/login");
+  window.location.reload(true);
   return {
     type: SET_AUTH,
-    auth: {},
+    auth: {id:{}},
   };
 };
 

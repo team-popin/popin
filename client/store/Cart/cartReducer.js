@@ -2,10 +2,16 @@ import axios from "axios";
 
 // action types
 const ADD_TO_CART = "ADD_TO_CART";
+const REMOVE_FROM_CART = "REMOVE_FROM_CART";
 
 // action creators
 const addToCart = (productTimeSlot) => ({
   type: ADD_TO_CART,
+  productTimeSlot,
+});
+
+const removeFromCart = (productTimeSlot) => ({
+  type: REMOVE_FROM_CART,
   productTimeSlot,
 });
 
@@ -22,10 +28,15 @@ export const putCart = (timeSlot) => {
           authorization: token,
         },
       });
+
+      console.log(user);
       // then check if any associated order exists. If exists, simply get the order from server.
       let { data: order } = await axios.get(
-        `api/order/?userId=${user.id}&isPurchased=false`
+        `/api/order/openOrder?userId=${user.id}`
       );
+
+      console.log("Order", order);
+
       // if no existing order, create a new order for the user
       if (!order) {
         const { data: newOrder } = await axios.post("api/order", {
@@ -33,63 +44,98 @@ export const putCart = (timeSlot) => {
         });
         order = newOrder;
       }
+      console.log("ORDER>>>>>>", order);
 
       // then update the productTimeSlot with the orderId
       const { data: productTimeSlot } = await axios.put(
         `/api/productTimeSlot/${timeSlot.id}`,
         { orderId: order.id }
       );
-
+      console.log(productTimeSlot);
       // add the item to the redux store
-      let localCart = window.localStorage.getItem('cart');
+      let localCart = window.localStorage.getItem("cart");
       if (!localCart) {
-        window.localStorage.setItem('cart', '{}');
-        localCart = window.localStorage.getItem('cart');
+        window.localStorage.setItem("cart", "{}");
+        localCart = window.localStorage.getItem("cart");
       }
       const cart = JSON.parse(localCart);
-      if (cart[productTimeSlot.productId])
-      {
+      if (cart[productTimeSlot.productId]) {
         cart[productTimeSlot.productId].push(productTimeSlot);
-      }
-      else {
+      } else {
         cart[productTimeSlot.productId] = [productTimeSlot];
       }
-      window.localStorage.setItem('cart', JSON.stringify(cart));
+      window.localStorage.setItem("cart", JSON.stringify(cart));
       dispatch(addToCart(productTimeSlot));
     }
 
     //if a user is not logged in, just add the item to the session storage/redux store (we'll create an order for non-logged-in users when they checkout):
     else {
-      let localCart = window.localStorage.getItem('cart');
+      let localCart = window.localStorage.getItem("cart");
       if (!localCart) {
-        window.localStorage.setItem('cart', '{}');
-        localCart = window.localStorage.getItem('cart');
+        window.localStorage.setItem("cart", "{}");
+        localCart = window.localStorage.getItem("cart");
       }
       const cart = JSON.parse(localCart);
-      if (cart[timeSlot.productId])
-      {
+      if (cart[timeSlot.productId]) {
         cart[timeSlot.productId].push(timeSlot);
-      }
-      else {
+      } else {
         cart[timeSlot.productId] = [timeSlot];
       }
-      window.localStorage.setItem('cart', JSON.stringify(cart));
+      window.localStorage.setItem("cart", JSON.stringify(cart));
       dispatch(addToCart(timeSlot));
     }
   };
 };
 
+export const removeItemFromCart = (timeSlot) => {
+  console.log("THUNK IS RUNNING");
+  // console.log(timeSlot)
+
+  return async (dispatch) => {
+    const { data } = await axios.put(`/api/productTimeSlot/${timeSlot.id}`, {
+      orderId: null,
+    });
+    console.log(data);
+    dispatch(removeFromCart(data));
+  };
+};
 // cartReducer
-const initialCart = window.localStorage.getItem('cart') || '{}';
+const initialCart = window.localStorage.getItem("cart") || "{}";
 const initialState = JSON.parse(initialCart);
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case ADD_TO_CART:
       //The keys in state are productIds. The values are arrays containing productTimeSlots whos productId is the key!
-      const newCart = window.localStorage.getItem('cart') || '{}';
+      const newCart = window.localStorage.getItem("cart") || "{}";
       const newState = JSON.parse(newCart);
       return newState;
+
+    case REMOVE_FROM_CART:
+      // console.log("REDUCER RUNNING")
+      let cart = JSON.parse(window.localStorage.getItem("cart"));
+      // console.log(cart)
+      // console.log("ACTION",action.productTimeSlot.product.id)
+      console.log("START ARRAY>>>>>>>>", Object.keys(cart));
+      let newCartArray = [];
+      // eslint-disable-next-line no-case-declarations
+      const filteredCart = Object.keys(cart).map((cartKey) => {
+        console.log("CART KEY>>>>>>", cartKey);
+        console.log(cart[cartKey]);
+        const filteredProductTimeSlots = cart[cartKey].filter((item) => {
+          if (item.id !== action.productTimeSlot.id) {
+            return item;
+          }
+        });
+        let object = {}
+        object[cartKey] = filteredProductTimeSlots
+        newCartArray.push(object);
+      });
+      console.log("NEWCARTARRAY", newCartArray);
+      // cart[action.productTimeSlot.product.id].filter((item) => item.id !== action.productTimeSlot.id);
+      console.log("FILTERED CART>>>>", newCartArray);
+      return filteredCart;
+
     default:
       return state;
   }
