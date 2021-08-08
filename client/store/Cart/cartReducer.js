@@ -39,9 +39,13 @@ export const putCart = (timeSlot) => {
 
       // if no existing order, create a new order for the user
       if (!order) {
-        const { data: newOrder } = await axios.post("api/order", {
+        console.log("USER DOES NOT HAVE AN OPEN ORDER. MAKING ORDER NOW");
+        console.log(user.id);
+        const { data: newOrder } = await axios.post("/api/order", {
           userId: user.id,
+          isPurchased: false,
         });
+        // console.log(data)
         order = newOrder;
       }
       console.log("ORDER>>>>>>", order);
@@ -114,27 +118,20 @@ export default (state = initialState, action) => {
     case REMOVE_FROM_CART:
       // console.log("REDUCER RUNNING")
       let cart = JSON.parse(window.localStorage.getItem("cart"));
-      // console.log(cart)
-      // console.log("ACTION",action.productTimeSlot.product.id)
-      console.log("START ARRAY>>>>>>>>", Object.keys(cart));
-      let newCartArray = [];
+      let newCartObject = {};
       // eslint-disable-next-line no-case-declarations
-      const filteredCart = Object.keys(cart).map((cartKey) => {
-        console.log("CART KEY>>>>>>", cartKey);
-        console.log(cart[cartKey]);
+      Object.keys(cart).map((cartKey) => {
         const filteredProductTimeSlots = cart[cartKey].filter((item) => {
           if (item.id !== action.productTimeSlot.id) {
             return item;
           }
         });
-        let object = {}
-        object[cartKey] = filteredProductTimeSlots
-        newCartArray.push(object);
+        newCartObject[cartKey] = filteredProductTimeSlots;
       });
-      console.log("NEWCARTARRAY", newCartArray);
-      // cart[action.productTimeSlot.product.id].filter((item) => item.id !== action.productTimeSlot.id);
-      console.log("FILTERED CART>>>>", newCartArray);
-      return filteredCart;
+
+
+      window.localStorage.setItem("cart", JSON.stringify(newCartObject));
+      return newCartObject;
 
     default:
       return state;

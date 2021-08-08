@@ -75,9 +75,9 @@ const dummyCart = {
 
 export default function Cart() {
   // const cart = dummyCart
-  const cart = useSelector(state => state.cart);
+  const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-  let history = useHistory()
+  let history = useHistory();
 
   return (
     <div>
@@ -90,36 +90,54 @@ export default function Cart() {
       >
         Your Cart
       </Typography>
-{console.log("CART STATE", cart)}
+      {console.log("CART STATE", cart)}
       {Object.keys(cart).map((productId) => {
         const productTimeSlots = cart[productId];
 
-      return (
-
-        <div key={productId}>{console.log(productTimeSlots)}
-          {/* <h1>{productTimeSlots[0].product.name}</h1>
-          <p>{productTimeSlots[0].product.description}</p> */}
-          <Button onClick={()=>history.push(`/product/${productTimeSlots[0].product.id}`)}>Add More Time Slots</Button>
-          {productTimeSlots.map((productTimeSlot) => {
-            return(
-              <div key={productTimeSlot.id}>
-              <p>{productTimeSlot.dateTime.slice(0,10)} {productTimeSlot.dateTime.slice(11,16)}</p>
-              <Button  onClick={()=>dispatch(removeItemFromCart(productTimeSlot))}>Remove</Button>
-              </div>
-            )
-          })}
-        </div>
-      )
+        //If the productTimeSlots array has product time slots in it (this is important because when a user removes all of the items of a certain product from their cart, they are left with the key-value pair for that product in their car, but the value (array) is empty and will break the page without this condition.)
+        if (productTimeSlots[0]) {
+          return (
+            <div key={productId}>
+              {console.log(productTimeSlots)}
+              <h1>{productTimeSlots[0].product.name}</h1>
+              <p>{productTimeSlots[0].product.description}</p>
+              <Button
+                onClick={() =>
+                  history.push(`/product/${productTimeSlots[0].product.id}`)
+                }
+              >
+                Add More Time Slots
+              </Button>
+              {productTimeSlots.map((productTimeSlot) => {
+                return (
+                  <div key={productTimeSlot.id}>
+                    <p>
+                      {productTimeSlot.dateTime.slice(0, 10)}{" "}
+                      {productTimeSlot.dateTime.slice(11, 16)}
+                    </p>
+                    <Button
+                      onClick={() =>
+                        dispatch(removeItemFromCart(productTimeSlot))
+                      }
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        }
       })}
 
       <Button
         style={{ backgroundColor: "green", color: "white" }}
         onClick={() => {
           // checkoutCartThunk(cart);
-          dispatch(checkoutCartThunk(cart))
+          dispatch(checkoutCartThunk(cart));
           // console.log("onclick is running whooo!!!")
           // console.log("THIS IS THE CART", cart)
-          history.push('/ordersuccessful')
+          history.push("/ordersuccessful");
         }}
       >
         Checkout Cart

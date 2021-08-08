@@ -91,7 +91,7 @@ router.put('/:id', async (req, res, next) => {
 //post order
 router.post('/', async (req, res, next) => {
   try {
-    const newOrder = await Order.create({isPurchased: true});
+    const newOrder = await Order.create({isPurchased: req.body.isPurchased});
     newOrder.setUser(req.body.userId);
     res.json(newOrder);
   }

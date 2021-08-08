@@ -38,7 +38,7 @@ export const checkoutCartThunk = cart => {
 
     //If a user is not logged in, lets create a new order for them now and associate the items in the redux store cart with the order
     else {
-      const { data: order } = await axios.post('api/order');
+      const { data: order } = await axios.post('api/order', {isPurchased: false});
 
       console.log("Cart Object>>>>>", cart)
       //Associate all of the productTimeSlots on the redux store cart with this order
