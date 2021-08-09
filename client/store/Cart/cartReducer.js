@@ -3,8 +3,8 @@ import axios from "axios";
 // action types
 const ADD_TO_CART = "ADD_TO_CART";
 const REMOVE_FROM_CART = "REMOVE_FROM_CART";
-const REFRESH_CART_ON_LOGIN = "REFRESH_CART_ON_LOGIN"
-const CLEAR_CART_ON_CHECKOUT = "CLEAR_CART_ON_CHECKOUT"
+const REFRESH_CART_ON_LOGIN = "REFRESH_CART_ON_LOGIN";
+const CLEAR_CART_ON_CHECKOUT = "CLEAR_CART_ON_CHECKOUT";
 
 // action creators
 const addToCart = (productTimeSlot) => ({
@@ -19,12 +19,12 @@ const removeFromCart = (productTimeSlot) => ({
 
 const refreshCartOnLogin = (cartObject) => ({
   type: REFRESH_CART_ON_LOGIN,
-  cartObject
-})
+  cartObject,
+});
 
 const clearCart = () => ({
-  type: CLEAR_CART_ON_CHECKOUT
-})
+  type: CLEAR_CART_ON_CHECKOUT,
+});
 
 // thunk creators
 export const putCart = (timeSlot) => {
@@ -101,12 +101,8 @@ export const removeItemFromCart = (timeSlot) => {
     // if a user is logged in
     const token = window.localStorage.getItem("token");
     if (token) {
-      
       // Remove order association from productTimeSlot
-      await axios.put(
-        `/api/productTimeSlot/${timeSlot.id}`,
-        { orderId: null }
-      );
+      await axios.put(`/api/productTimeSlot/${timeSlot.id}`, { orderId: null });
     }
     dispatch(removeFromCart(timeSlot));
   };
@@ -140,31 +136,35 @@ export const cartOnLogin = () => {
         });
         order = newOrder;
       }
-      
+
       //Find all items that are associated with the open order, and store them for now
 
-      const itemsOnOrderBeforeLogin = await axios.get(
-        `/api/productTimeSlot/${order.id}`
+      const { data: itemsOnOrderBeforeLogin } = await axios.get(
+        `/api/productTimeSlot/order/${order.id}`
       );
 
       //Find the items that are currently on the cart object prior to the user logging in
 
-      let localCartBeforeLogin = window.localStorage.getItem("cart");
+      let localCartBeforeLogin = JSON.parse(
+        window.localStorage.getItem("cart")
+      );
 
       //Add prior-to-logged-in cart items to the openOrder and put them back onto the cart with their order association
 
       let newCartObject = {};
 
-      Object.keys(localCartBeforeLogin).map((cartKey) => {
-        newCartObject[cartKey] = localCartBeforeLogin[cartKey].map(
-          async (productTimeSlot) => {
-            return await axios.put(`productTimeSlot/${productTimeSlot.id}`, {
-              orderId: order.id,
-            });
-          }
-        );
-      });
-      
+      if (localCartBeforeLogin) {
+        Object.keys(localCartBeforeLogin).map((cartKey) => {
+          newCartObject[cartKey] = localCartBeforeLogin[cartKey].map(
+            async (productTimeSlot) => {
+              return await axios.put(`productTimeSlot/${productTimeSlot.id}`, {
+                orderId: order.id,
+              });
+            }
+          );
+        });
+      }
+
       //Combine old and new into one object
       let combinedOrder = {};
 
@@ -178,29 +178,31 @@ export const cartOnLogin = () => {
         ];
       });
 
-      Object.keys(itemsOnOrderBeforeLogin).map((cartKey) => {
-        if (!combinedOrder[cartKey]) {
-          combinedOrder[cartKey] = [];
+      console.log(itemsOnOrderBeforeLogin)
+
+
+      itemsOnOrderBeforeLogin.map((productTimeSlot) => {
+        if (!combinedOrder[productTimeSlot.product.id]) {
+          combinedOrder[productTimeSlot.product.id] = [];
         }
-        combinedOrder[cartKey] = [
-          ...combinedOrder[cartKey],
-          ...itemsOnOrderBeforeLogin[cartKey],
+        combinedOrder[productTimeSlot.product.id] = [
+          ...combinedOrder[productTimeSlot.product.id],
+          productTimeSlot,
         ];
       });
 
-      window.localStorage.setItem("cart", combinedOrder)
-      dispatch(refreshCartOnLogin(combinedOrder))
+      window.localStorage.setItem("cart", combinedOrder);
+      dispatch(refreshCartOnLogin(combinedOrder));
     }
   };
 };
 
 export const clearCartThunk = () => {
-  return async dispatch => {
-    window.localStorage.setItem("cart", '{}');
-    dispatch(clearCart())
-  }
-}
-
+  return async (dispatch) => {
+    window.localStorage.setItem("cart", "{}");
+    dispatch(clearCart());
+  };
+};
 
 // cartReducer
 const initialCart = window.localStorage.getItem("cart") || "{}";
@@ -231,10 +233,10 @@ export default (state = initialState, action) => {
       return newCartObject;
 
     case REFRESH_CART_ON_LOGIN:
-      return action.cartObject
+      return action.cartObject;
 
     case CLEAR_CART_ON_CHECKOUT:
-      return {}
+      return {};
 
     default:
       return state;
