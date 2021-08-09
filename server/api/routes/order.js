@@ -40,6 +40,8 @@ router.get('/openOrder', async (req, res, next) => {
   try {
     const order = await Order.findOne({where: {userId: req.query.userId, isPurchased: false}});
     res.json(order);
+
+    console.log("BackEND", order)
   }
   catch (err) {
     next(err);
@@ -89,7 +91,7 @@ router.put('/:id', async (req, res, next) => {
 //post order
 router.post('/', async (req, res, next) => {
   try {
-    const newOrder = await Order.create();
+    const newOrder = await Order.create({isPurchased: req.body.isPurchased});
     newOrder.setUser(req.body.userId);
     res.json(newOrder);
   }
