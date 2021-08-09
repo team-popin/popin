@@ -4,13 +4,8 @@ import axios from "axios";
 import { checkoutCartThunk } from "../store/Cart/checkoutReducer";
 
 import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
-import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -80,69 +75,81 @@ export default function Cart() {
   let history = useHistory();
 
   return (
-    <div>
-      <Typography
-        component="h1"
-        variant="h2"
-        align="center"
-        color="textPrimary"
-        gutterBottom
-      >
-        Your Cart
-      </Typography>
-      {console.log("CART STATE", cart)}
-      {Object.keys(cart).map((productId) => {
-        const productTimeSlots = cart[productId];
+    <React.Fragment>
+      <CssBaseline />
+      <main>
+        <Typography
+          component="h1"
+          variant="h2"
+          align="center"
+          color="textPrimary"
+          gutterBottom
+        >
+          Your Cart
+        </Typography>
+        {console.log("CART STATE", cart)}
+        {Object.keys(cart).map((productId) => {
+          const productTimeSlots = cart[productId];
 
-        //If the productTimeSlots array has product time slots in it (this is important because when a user removes all of the items of a certain product from their cart, they are left with the key-value pair for that product in their car, but the value (array) is empty and will break the page without this condition.)
-        if (productTimeSlots[0]) {
-          return (
-            <div key={productId}>
-              {console.log(productTimeSlots)}
-              <h1>{productTimeSlots[0].product.name}</h1>
-              <p>{productTimeSlots[0].product.description}</p>
-              <Button
-                onClick={() =>
-                  history.push(`/product/${productTimeSlots[0].product.id}`)
-                }
-              >
-                Add More Time Slots
-              </Button>
-              {productTimeSlots.map((productTimeSlot) => {
-                return (
-                  <div key={productTimeSlot.id}>
-                    <p>
-                      {productTimeSlot.dateTime.slice(0, 10)}{" "}
-                      {productTimeSlot.dateTime.slice(11, 16)}
-                    </p>
-                    <Button
-                      onClick={() =>
-                        dispatch(removeItemFromCart(productTimeSlot))
-                      }
+          //If the productTimeSlots array has product time slots in it (this is important because when a user removes all of the items of a certain product from their cart, they are left with the key-value pair for that product in their car, but the value (array) is empty and will break the page without this condition.)
+          if (productTimeSlots[0]) {
+            return (
+              <div key={productId}>
+                {console.log(productTimeSlots)}
+                <Grid display="flex" flexDirection="row">
+                  <h1>{productTimeSlots[0].product.name}</h1>
+                  <Button
+                    onClick={() =>
+                      history.push(`/product/${productTimeSlots[0].product.id}`)
+                    }
+                  >
+                    Add More Time Slots
+                  </Button>
+                </Grid>
+                <p>{productTimeSlots[0].product.description}</p>
+
+                {productTimeSlots.map((productTimeSlot) => {
+                  return (
+                    <Grid
+                      key={productTimeSlot.id}
+                      container
+                      direction="row"
+                      justifyContent="flex-start"
+                      alignItems="center"
                     >
-                      Remove
-                    </Button>
-                  </div>
-                );
-              })}
-            </div>
-          );
-        }
-      })}
+                      <Typography>
+                        {productTimeSlot.dateTime.slice(0, 10)}{" "}
+                        {productTimeSlot.dateTime.slice(11, 16)}
+                      </Typography>
+                      <Button
+                        onClick={() =>
+                          dispatch(removeItemFromCart(productTimeSlot))
+                        }
+                      >
+                        Remove
+                      </Button>
+                    </Grid>
+                  );
+                })}
+              </div>
+            );
+          }
+        })}
 
-      <Button
-        style={{ backgroundColor: "green", color: "white" }}
-        onClick={() => {
-          // checkoutCartThunk(cart);
-          dispatch(checkoutCartThunk(cart));
-          // console.log("onclick is running whooo!!!")
-          // console.log("THIS IS THE CART", cart)
-          history.push("/ordersuccessful");
-        }}
-      >
-        Checkout Cart
-      </Button>
-    </div>
+        <Button
+          style={{ backgroundColor: "green", color: "white" }}
+          onClick={() => {
+            // checkoutCartThunk(cart);
+            dispatch(checkoutCartThunk(cart));
+            // console.log("onclick is running whooo!!!")
+            // console.log("THIS IS THE CART", cart)
+            history.push("/ordersuccessful");
+          }}
+        >
+          Checkout Cart
+        </Button>
+      </main>
+    </React.Fragment>
   );
 }
 // button onclick handler --> call checkoutCartThunk(cart) <-- these are the productTimeSlots getting passed to the checkoutCartThunk

@@ -39,6 +39,20 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+//GET /api/productTimeSlot/order/:orderId
+router.get('/order/:orderId', async (req, res, next) => {
+  try {
+    res.send(await ProductTimeSlot.findAll({
+      where: {
+        orderId: req.params.orderId,
+      }, include: Product
+    }));
+  }
+  catch (err) {
+    next(err);
+  }
+});
+
 // GET /api/productTimeSlot/:id
 router.get('/:id', async (req, res, next) => {
   try {
