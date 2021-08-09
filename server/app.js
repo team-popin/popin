@@ -1,4 +1,6 @@
+const {models: {User}}= require('./db')
 const path = require('path')
+
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
@@ -10,9 +12,23 @@ app.use(morgan('dev'))
 // body parsing middleware
 app.use(express.json())
 
+// 
+const requireToken = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization;
+    const user = await User.byToken(token);
+    req.user = user;
+    next();
+  } catch(error) {
+    next(error);
+  }
+};
+
+
 // auth and api routes
-app.use('/auth', require('./auth'))
-app.use('/api', require('./api'))
+app.use('/auth', require('./auth'));
+app.use('/api', requireToken, require('./api'));
+app.use('/admin', require('./admin'));
 
 app.get('/', (req, res)=> res.sendFile(path.join(__dirname, '..', 'public/index.html')));
 

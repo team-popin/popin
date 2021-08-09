@@ -40,33 +40,25 @@ export const putCart = (timeSlot) => {
         },
       });
 
-      console.log(user);
       // then check if any associated order exists. If exists, simply get the order from server.
       let { data: order } = await axios.get(
         `/api/order/openOrder?userId=${user.id}`
       );
 
-      console.log("Order", order);
-
       // if no existing order, create a new order for the user
       if (!order) {
-        console.log("USER DOES NOT HAVE AN OPEN ORDER. MAKING ORDER NOW");
-        console.log(user.id);
         const { data: newOrder } = await axios.post("/api/order", {
           userId: user.id,
           isPurchased: false,
         });
-        // console.log(data)
         order = newOrder;
       }
-      console.log("ORDER>>>>>>", order);
 
       // then update the productTimeSlot with the orderId
       const { data: productTimeSlot } = await axios.put(
         `/api/productTimeSlot/${timeSlot.id}`,
         { orderId: order.id }
       );
-      console.log(productTimeSlot);
       // add the item to the redux store
       let localCart = window.localStorage.getItem("cart");
       if (!localCart) {
@@ -103,43 +95,22 @@ export const putCart = (timeSlot) => {
 };
 
 export const removeItemFromCart = (timeSlot) => {
-  console.log("THUNK IS RUNNING");
-  // console.log(timeSlot)
-
   return async (dispatch) => {
-    const { data } = await axios.get(`/api/productTimeSlot/${timeSlot.id}`);
-    // const { data } = await axios.put(`/api/productTimeSlot/${timeSlot.id}`, {
-    //   orderId: null,
-    // });
+    // const { data } = await axios.get(`/api/productTimeSlot/${timeSlot.id}`);
 
     // if a user is logged in
     const token = window.localStorage.getItem("token");
     if (token) {
-      // Get user
-      // const { data: user } = await axios.get("/auth/me", {
-      //   headers: {
-      //     authorization: token,
-      //   },
-      // });
-
-      // // Find their open order
-      // let { data: order } = await axios.get(
-      //   `/api/order/openOrder?userId=${user.id}`
-      // );
-
+      
       // Remove order association from productTimeSlot
-      const { data: productTimeSlot } = await axios.put(
+      await axios.put(
         `/api/productTimeSlot/${timeSlot.id}`,
         { orderId: null }
       );
     }
-    console.log(data);
     dispatch(removeFromCart(timeSlot));
   };
 };
-// cartReducer
-const initialCart = window.localStorage.getItem("cart") || "{}";
-const initialState = JSON.parse(initialCart);
 
 export const cartOnLogin = () => {
   return async (dispatch) => {
@@ -156,27 +127,20 @@ export const cartOnLogin = () => {
         },
       });
 
-      console.log("GOT THE USER>>>>", user);
       // then check if any associated order exists. If exists, simply get the order from server.
       let { data: order } = await axios.get(
         `/api/order/openOrder?userId=${user.id}`
       );
 
-      console.log("GOT AN EXISTING OPEN ORDER>>>>", order);
-
       // if no existing order, create a new order for the user
       if (!order) {
-        console.log("USER DOES NOT HAVE AN OPEN ORDER. MAKING ORDER NOW");
-        console.log(user.id);
         const { data: newOrder } = await axios.post("/api/order", {
           userId: user.id,
           isPurchased: false,
         });
-        // console.log(data)
         order = newOrder;
       }
-      console.log("ORDER>>>>>>", order);
-
+      
       //Find all items that are associated with the open order, and store them for now
 
       const itemsOnOrderBeforeLogin = await axios.get(
@@ -200,8 +164,8 @@ export const cartOnLogin = () => {
           }
         );
       });
+      
       //Combine old and new into one object
-
       let combinedOrder = {};
 
       Object.keys(newCartObject).map((cartKey) => {
@@ -237,6 +201,11 @@ export const clearCartThunk = () => {
   }
 }
 
+
+// cartReducer
+const initialCart = window.localStorage.getItem("cart") || "{}";
+const initialState = JSON.parse(initialCart);
+
 export default (state = initialState, action) => {
   switch (action.type) {
     case ADD_TO_CART:
@@ -246,7 +215,6 @@ export default (state = initialState, action) => {
       return newState;
 
     case REMOVE_FROM_CART:
-      // console.log("REDUCER RUNNING")
       let cart = JSON.parse(window.localStorage.getItem("cart"));
       let newCartObject = {};
       // eslint-disable-next-line no-case-declarations
@@ -258,8 +226,6 @@ export default (state = initialState, action) => {
         });
         newCartObject[cartKey] = filteredProductTimeSlots;
       });
-
-      //
 
       window.localStorage.setItem("cart", JSON.stringify(newCartObject));
       return newCartObject;

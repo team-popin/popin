@@ -48,7 +48,6 @@ const Navbar = () => {
   const classes = useStyles();
   const cart = useSelector((state) => state.cart);
   const isLoggedIn = useSelector(state => !!state.user.id);
-  console.log(isLoggedIn)
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -84,43 +83,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-// const Navbar = ({handleClick, isLoggedIn}) => (
-//   <div>
-//     <nav>
-//       {isLoggedIn ? (
-//         <div>
-//           {/* The navbar will show these links after you log in */}
-//           <Link to="/home">Home</Link>
-//           <a href="#" onClick={handleClick}>
-//             Logout
-//           </a>
-//         </div>
-//       ) : (
-//         <div>
-
-//         </div>
-//       )}
-//     </nav>
-//     <hr />
-//   </div>
-// )
-
-// /**
-//  * CONTAINER
-//  */
-// const mapState = state => {
-//   return {
-//     isLoggedIn: !!state.user.id
-//   }
-// }
-
-// const mapDispatch = dispatch => {
-//   return {
-//     handleClick() {
-//       dispatch(logout())
-//     }
-//   }
-// }
-
-// export default connect(mapState, mapDispatch)(Navbar)

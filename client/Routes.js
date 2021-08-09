@@ -12,9 +12,9 @@ import SignUp from './components/SignUp';
 /**
  * COMPONENT
  */
-// const FourOhFour = () => {
-//   return <h1>Why are you here?</h1>;
-// };
+const FourOhFour = () => {
+  return <h1>Why are you here?</h1>;
+};
 
 class Routes extends Component {
   componentDidMount() {
@@ -29,24 +29,24 @@ class Routes extends Component {
         {isLoggedIn ? (
           <Switch>
             <Route  exact path="/"  component={AllProducts} />
-            <Route  path="/login" component={Login} />
-            <Route  path="/cart" component={Cart} />
+            <Route  exact path="/login" component={Login} />
+            <Route exact path="/cart" component={Cart} />
             <Route path="/product/:id" component={SingleProduct} />
-            <Route  path="/product" component={AllProducts} />
-            <Route  path="/ordersuccessful" component={OrderSuccessful} />
-            <Route  path="/signup" component={SignUp} />
-            {/* <Route component={FourOhFour} /> */}
+            <Route exact path="/product" component={AllProducts} />
+            <Route exact path="/ordersuccessful" component={OrderSuccessful} />
+            <Route exact path="/signup" component={SignUp} />
+            <Route component={FourOhFour} />
           </Switch>
         ) : (
           <Switch>
             <Route exact path="/"  component={AllProducts} />
-            <Route  path="/login" component={Login} />
+            <Route exact  path="/login" component={Login} />
             <Route path="/product/:id" component={SingleProduct} />
-            <Route  path="/product" component={AllProducts} />
-            <Route  path="/cart" component={Cart} />
-            <Route  path="/ordersuccessful" component={OrderSuccessful} />
-            <Route  path="/signup" component={SignUp} />
-            {/* <Route component={FourOhFour} /> */}
+            <Route exact path="/product" component={AllProducts} />
+            <Route exact path="/cart" component={Cart} />
+            <Route exact path="/ordersuccessful" component={OrderSuccessful} />
+            <Route exact path="/signup" component={SignUp} />
+            <Route component={FourOhFour} />
           </Switch>
         )}
       </div>
