@@ -2,7 +2,6 @@ import React from "react";
 import { useSelector, useDispatch, useEffect } from "react-redux";
 import axios from "axios";
 import { checkoutCartThunk } from "../store/Cart/checkoutReducer";
-
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
@@ -69,7 +68,6 @@ const dummyCart = {
 };
 
 export default function Cart() {
-  // const cart = dummyCart
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   let history = useHistory();
@@ -87,7 +85,6 @@ export default function Cart() {
         >
           Your Cart
         </Typography>
-        {console.log("CART STATE", cart)}
         {Object.keys(cart).map((productId) => {
           const productTimeSlots = cart[productId];
 
@@ -95,7 +92,6 @@ export default function Cart() {
           if (productTimeSlots[0]) {
             return (
               <div key={productId}>
-                {console.log(productTimeSlots)}
                 <Grid display="flex" flexDirection="row">
                   <h1>{productTimeSlots[0].product.name}</h1>
                   <Button
@@ -139,10 +135,7 @@ export default function Cart() {
         <Button
           style={{ backgroundColor: "green", color: "white" }}
           onClick={() => {
-            // checkoutCartThunk(cart);
             dispatch(checkoutCartThunk(cart));
-            // console.log("onclick is running whooo!!!")
-            // console.log("THIS IS THE CART", cart)
             history.push("/ordersuccessful");
           }}
         >
@@ -152,4 +145,3 @@ export default function Cart() {
     </React.Fragment>
   );
 }
-// button onclick handler --> call checkoutCartThunk(cart) <-- these are the productTimeSlots getting passed to the checkoutCartThunk

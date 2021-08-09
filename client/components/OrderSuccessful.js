@@ -4,12 +4,7 @@ import { useHistory } from "react-router";
 
 export default function OrderSuccessful() {
   let history = useHistory()
-  // useEffect(() => {
-  //    setTimeout(() => {
-  //     history.push("/"), 50000;
-  //   });
-
-  // })
+  
   let count = 5;
   useEffect(() => {
     const timer = setTimeout(() => {

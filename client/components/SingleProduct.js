@@ -124,20 +124,10 @@ const SingleProduct = (props) => {
       return acc + value.length;
     }, 0);
   };
+  
   return (
     <React.Fragment>
       <CssBaseline />
-      {/* <AppBar position="relative">
-        <Toolbar className={classes.cart}>
-          <Typography variant="h6" color="inherit" noWrap>
-            {product.name}
-          </Typography>
-          <div className={classes.shoppingCartIconDiv}>
-            <ShoppingCartIcon className={classes.shoppingCartIcon} onClick={() => history.push('/cart')} />
-            <div className={classes.shoppingCartItemNum}>{getCartSize()}</div>
-          </div>
-        </Toolbar>
-      </AppBar> */}
       <main>
         <Grid>
           <Card className={classes.card}>
@@ -214,7 +204,6 @@ const SingleProduct = (props) => {
                         };
 
                         if (timeSlotInCart()) {
-                          console.log(timeSlotInCart());
                           return (
                             <Grid key={timeSlot.id}>
                               <Button

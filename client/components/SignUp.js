@@ -73,10 +73,8 @@ export default function SignUp() {
   }
 
   const handleSubmit = (e) => {
-    console.log('form submitting...')
     e.preventDefault();
     dispatch(signUpThunk(form))
-    console.log('form should have been submitted.')
   }
 
   return (
@@ -170,31 +168,3 @@ export default function SignUp() {
     </Container>
   );
 }
-
-
-// const mapSignup = state => {
-//   return {
-//     name: 'signup',
-//     displayName: 'Sign Up',
-//     error: state.user.error
-//   }
-// }
-
-// const mapDispatch = dispatch => {
-//   return {
-//     signUpThunk: (form) => dispatch(signUpThunk(form))
-//   }
-// }
-
-// export default connect(mapSignup, mapDispatch)(SignUp);
-
-
-
-// import React, { useState } from 'react';
-// export default class SignUp extends React.Component {
-//   render() {
-//     return (
-//       <div><h1>Signup Page</h1></div>
-//     )
-//   }
-// }
