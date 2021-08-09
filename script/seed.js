@@ -15,12 +15,12 @@ const {
 
 const seed = async () => {
   try {
-    if (process.env.NODE_ENV === 'development') {
+    // if (process.env.NODE_ENV === 'development') {
       await db.sync({ force: true });
-    }
-    else {
-      await db.sync();
-    }
+    // }
+    // else {
+    //   await db.sync();
+    // }
     console.log("seeding...");
 
     //Empty arrays so we can add instances in order to create associations between the instances later.
