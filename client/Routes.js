@@ -1,16 +1,21 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
-import Login from './components/LogIn'
+import Login from './components/LogIn';
 import { me } from './store';
 import AllProducts from './components/AllProducts';
 import Cart from './components/Cart';
 import SingleProduct from './components/SingleProduct';
 import OrderSuccessful from './components/OrderSuccessful';
+import SignUp from './components/SignUp';
 
 /**
  * COMPONENT
  */
+// const FourOhFour = () => {
+//   return <h1>Why are you here?</h1>;
+// };
+
 class Routes extends Component {
   componentDidMount() {
     this.props.loadInitialData();
@@ -23,22 +28,25 @@ class Routes extends Component {
       <div>
         {isLoggedIn ? (
           <Switch>
-          <Route path="/" exact component={AllProducts} />
-          <Route path="/login" component={Login} />
-          <Route path="/cart" component={Cart} />
-          <Route path="/product/:id" component={SingleProduct} />
-          <Route path="/product" component={AllProducts} />
-          <Route path="/ordersuccessful" component={OrderSuccessful} />
-        </Switch>
+            <Route  exact path="/"  component={AllProducts} />
+            <Route  path="/login" component={Login} />
+            <Route  path="/cart" component={Cart} />
+            <Route path="/product/:id" component={SingleProduct} />
+            <Route  path="/product" component={AllProducts} />
+            <Route  path="/ordersuccessful" component={OrderSuccessful} />
+            <Route  path="/signup" component={SignUp} />
+            {/* <Route component={FourOhFour} /> */}
+          </Switch>
         ) : (
           <Switch>
-            <Route path="/" exact component={AllProducts} />
-            <Route path="/login" component={Login} />
+            <Route exact path="/"  component={AllProducts} />
+            <Route  path="/login" component={Login} />
             <Route path="/product/:id" component={SingleProduct} />
-            <Route path="/product" component={AllProducts} />
-            <Route path="/cart" component={Cart} />
-            <Route path="/ordersuccessful" component={OrderSuccessful} />
-
+            <Route  path="/product" component={AllProducts} />
+            <Route  path="/cart" component={Cart} />
+            <Route  path="/ordersuccessful" component={OrderSuccessful} />
+            <Route  path="/signup" component={SignUp} />
+            {/* <Route component={FourOhFour} /> */}
           </Switch>
         )}
       </div>
