@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchProducts } from '../store/Product/subReducer/allProducts';
+import { fetchProducts } from '../store/Product/allProducts';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -19,6 +19,11 @@ import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import {getCategories} from '../store/Product/category';
 
 const useStyles = makeStyles(theme => ({
   icon: {
@@ -64,18 +69,34 @@ const useStyles = makeStyles(theme => ({
   avatar: {
     backgroundColor: red[500],
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
 const AllProducts = () => {
   const products = useSelector(state => state.products);
   const user = useSelector(state => state.user);
+  // const categories = useSelector(state => state.categories);
   const dispatch = useDispatch();
   const classes = useStyles();
-
+//
   useEffect(() => {
     dispatch(fetchProducts());
+    // dispatch(getCategories());
   }, [dispatch]);
 
+  const [category, setCategory] = React.useState('');
+
+  const handleChange = (event) => {
+    setCategory(event.target.value);
+  };
+
+//
   return (
     <React.Fragment>
       <CssBaseline />
@@ -101,6 +122,23 @@ const AllProducts = () => {
               Pick a category from the drop down menu to get started with a
               session from professionals from around the world!
             </Typography>
+
+            <FormControl variant="outlined" className={classes.formControl}>
+        <InputLabel id="demo-simple-select-outlined-label">Category</InputLabel>
+        <Select
+          labelId="demo-simple-select-outlined-label"
+          id="demo-simple-select-outlined"
+          value={category}
+          onChange={handleChange}
+          label="Category"
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+{/* {categories.map(category=>{ <MenuItem key= {category.id} value={category.name}>{category.name}</MenuItem>})
+         } */}
+        </Select>
+      </FormControl>
           </Container>
         </div>
         {/* End hero unit */}
