@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {clearCartThunk} from './cartReducer.js';
 
 // action types
 const CHECKOUT_CART = 'CHECKOUT_CART';
@@ -75,7 +76,9 @@ export const checkoutCartThunk = cart => {
       });
 
       dispatch(checkoutCart(updatedOrder));
+
     }
+    dispatch(clearCartThunk())
   };
 };
 

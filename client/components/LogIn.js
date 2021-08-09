@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function LogIn(props) {
+function LogIn(props) {
   const classes = useStyles();
   const {name, handleSubmit} = props
   return (
@@ -123,4 +123,4 @@ const mapDispatch = dispatch => {
   }
 }
 
-export const SignIn = connect(mapLogin, mapDispatch)(LogIn)
+export default connect(mapLogin, mapDispatch)(LogIn)

@@ -4,6 +4,7 @@ import axios from "axios";
 const ADD_TO_CART = "ADD_TO_CART";
 const REMOVE_FROM_CART = "REMOVE_FROM_CART";
 const REFRESH_CART_ON_LOGIN = "REFRESH_CART_ON_LOGIN"
+const CLEAR_CART_ON_CHECKOUT = "CLEAR_CART_ON_CHECKOUT"
 
 // action creators
 const addToCart = (productTimeSlot) => ({
@@ -19,6 +20,10 @@ const removeFromCart = (productTimeSlot) => ({
 const refreshCartOnLogin = (cartObject) => ({
   type: REFRESH_CART_ON_LOGIN,
   cartObject
+})
+
+const clearCart = () => ({
+  type: CLEAR_CART_ON_CHECKOUT
 })
 
 // thunk creators
@@ -225,6 +230,13 @@ export const cartOnLogin = () => {
   };
 };
 
+export const clearCartThunk = () => {
+  return async dispatch => {
+    window.localStorage.setItem("cart", '{}');
+    dispatch(clearCart())
+  }
+}
+
 export default (state = initialState, action) => {
   switch (action.type) {
     case ADD_TO_CART:
@@ -254,6 +266,9 @@ export default (state = initialState, action) => {
 
     case REFRESH_CART_ON_LOGIN:
       return action.cartObject
+
+    case CLEAR_CART_ON_CHECKOUT:
+      return {}
 
     default:
       return state;
