@@ -28,8 +28,8 @@ class Routes extends Component {
       <div>
         {isLoggedIn ? (
           <Switch>
-            <Route  exact path="/"  component={AllProducts} />
-            <Route  exact path="/login" component={Login} />
+            <Route exact path="/"  component={AllProducts} />
+            <Route exact path="/login" component={Login} />
             <Route exact path="/cart" component={Cart} />
             <Route path="/product/:id" component={SingleProduct} />
             <Route exact path="/product" component={AllProducts} />

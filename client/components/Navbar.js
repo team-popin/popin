@@ -13,6 +13,7 @@ import VpnKeySharpIcon from "@material-ui/icons/VpnKeySharp";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
+
 const useStyles = makeStyles((theme) => ({
   cart: {
     display: "flex",
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
   logInOut: {
     marginLeft: "25px",
-
+    cursor: "pointer",
   },
   shoppingCartItemNum: {
     width: "20px",
@@ -44,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
   },
 }));
+
 const Navbar = () => {
   const classes = useStyles();
   const cart = useSelector((state) => state.cart);

@@ -5,6 +5,7 @@ const {
   createProduct,
   updateProduct,
   deleteProduct,
+  getCategory,
 } = require('../controllers/product');
 
 // get all products
@@ -21,6 +22,8 @@ router.put('/:id', updateProduct);
 
 // delete product by id
 router.delete('/:id', deleteProduct);
+
+router.get('/category', getCategory)
 
 router.use((req, res, next) => {
   const err = new Error('API route not found!');

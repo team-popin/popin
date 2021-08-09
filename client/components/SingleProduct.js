@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { fetchProduct } from "../store/Product/subReducer/singleProduct";
-import { fetchTimeSlotsForDates } from "../store/Product/subReducer/timeSlots";
+import { fetchProduct } from "../store/Product/singleProduct";
+import { fetchTimeSlotsForDates } from "../store/Product/timeSlots";
 import { putCart } from "../store/Cart/cartReducer";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
@@ -124,7 +124,7 @@ const SingleProduct = (props) => {
       return acc + value.length;
     }, 0);
   };
-  
+
   return (
     <React.Fragment>
       <CssBaseline />
