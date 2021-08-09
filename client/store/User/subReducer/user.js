@@ -32,7 +32,7 @@ export const authenticate = (email, password, method) => async dispatch => {
     const res = await axios.post(`/auth/${method}`, { email, password });
     window.localStorage.setItem(TOKEN, res.data.token);
     dispatch(me());
-    dispatch(cartOnLogin())
+    // dispatch(cartOnLogin())
     history.push('/product');
   } catch (authError) {
     return dispatch(setAuth({ error: authError }));
@@ -45,7 +45,7 @@ export const signUpThunk = form => async dispatch => {
     const res = await axios.post('/auth/signup', form);
     window.localStorage.setItem(TOKEN, res.data.token);
     dispatch(me());
-    dispatch(cartOnLogin())
+    // dispatch(cartOnLogin())
     history.push('/product');
   } catch (authError) {
     return dispatch(setAuth({ error: authError }));
