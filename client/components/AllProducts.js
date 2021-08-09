@@ -68,6 +68,7 @@ const useStyles = makeStyles(theme => ({
 
 const AllProducts = () => {
   const products = useSelector(state => state.products);
+  const user = useSelector(state => state.user);
   const dispatch = useDispatch();
   const classes = useStyles();
 
@@ -89,7 +90,7 @@ const AllProducts = () => {
               color="textPrimary"
               gutterBottom
             >
-              Welcome, User
+              {user.firstName ? `Welcome, ${user.firstName}!` : 'Welcome!'}
             </Typography>
             <Typography
               variant="h5"
