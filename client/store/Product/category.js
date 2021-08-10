@@ -8,7 +8,6 @@ export const getCategories = () => {
 
   return async dispatch => {
     const { data } = await axios.get('/api/product/category')
-    console.log(data)
     dispatch(getallCategories(data))
   }
 }
