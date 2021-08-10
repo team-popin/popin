@@ -9,6 +9,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import ExitToAppSharpIcon from '@material-ui/icons/ExitToAppSharp';
+import AccountCircleSharpIcon from '@material-ui/icons/AccountCircleSharp';
 import VpnKeySharpIcon from '@material-ui/icons/VpnKeySharp';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
@@ -76,12 +77,18 @@ const Navbar = () => {
             <div className={classes.shoppingCartItemNum}>{getCartSize()}</div>
           </div>
           {isLoggedIn ? (
-            <ExitToAppSharpIcon
-              className={classes.logInOut}
-              onClick={() => {
-                dispatch(logout());
-              }}
-            />
+            <React.Fragment>
+              <AccountCircleSharpIcon
+                className={classes.logInOut}
+                onClick={() => history.push('/userprofile')}
+              />
+              <ExitToAppSharpIcon
+                className={classes.logInOut}
+                onClick={() => {
+                  dispatch(logout());
+                }}
+              />
+            </React.Fragment>
           ) : (
             <VpnKeySharpIcon
               className={classes.logInOut}
