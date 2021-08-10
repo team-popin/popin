@@ -8,6 +8,8 @@ import Cart from './components/Cart';
 import SingleProduct from './components/SingleProduct';
 import OrderSuccessful from './components/OrderSuccessful';
 import SignUp from './components/SignUp';
+import AddProduct from './components/AddProduct';
+
 
 /**
  * COMPONENT
@@ -35,6 +37,7 @@ class Routes extends Component {
             <Route exact path="/product" component={AllProducts} />
             <Route exact path="/ordersuccessful" component={OrderSuccessful} />
             <Route exact path="/signup" component={SignUp} />
+            <Route exact path="/addproduct" component={AddProduct} />
             <Route component={FourOhFour} />
           </Switch>
         ) : (
@@ -46,6 +49,7 @@ class Routes extends Component {
             <Route exact path="/cart" component={Cart} />
             <Route exact path="/ordersuccessful" component={OrderSuccessful} />
             <Route exact path="/signup" component={SignUp} />
+            <Route exact path="/addproduct" component={AddProduct} />
             <Route component={FourOhFour} />
           </Switch>
         )}
