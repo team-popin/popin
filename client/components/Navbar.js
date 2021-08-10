@@ -16,39 +16,39 @@ import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme) => ({
   cart: {
-    display: "flex",
-    justifyContent: "space-between",
+    display: 'flex',
+    justifyContent: 'space-between',
   },
   shoppingCartIconDiv: {
-    position: "relative",
+    position: 'relative',
   },
   shoppingCartIcon: {
-    cursor: "pointer",
+    cursor: 'pointer',
   },
   logInOut: {
     marginLeft: "25px",
     cursor: "pointer",
   },
   shoppingCartItemNum: {
-    width: "20px",
-    height: "20px",
-    borderRadius: "50%",
-    backgroundColor: "red",
-    color: "white",
-    position: "absolute",
-    top: "-40%",
-    right: "-40%",
-    textAlign: "center",
+    width: '20px',
+    height: '20px',
+    borderRadius: '50%',
+    backgroundColor: 'red',
+    color: 'white',
+    position: 'absolute',
+    top: '-40%',
+    right: '-40%',
+    textAlign: 'center',
   },
   Icons: {
-    display: "flex",
-    justifyContent: "flex-end",
+    display: 'flex',
+    justifyContent: 'flex-end',
   },
 }));
 
 const Navbar = () => {
   const classes = useStyles();
-  const cart = useSelector((state) => state.cart);
+  const cart = useSelector(state => state.cart);
   const isLoggedIn = useSelector(state => !!state.user.id);
   const history = useHistory();
   const dispatch = useDispatch();
@@ -62,23 +62,34 @@ const Navbar = () => {
   return (
     <AppBar position="relative">
       <Toolbar className={classes.cart}>
-        <ButtonBase onClick={()=>history.push("/product")}>
+        <ButtonBase onClick={() => history.push('/product')}>
           <Typography variant="h6" color="inherit" noWrap>
             Pop In!
           </Typography>
         </ButtonBase>
         <Grid className={classes.Icons}>
-        <div className={classes.shoppingCartIconDiv}>
-          <ShoppingCartIcon
-            className={classes.shoppingCartIcon}
-            onClick={() => history.push("/cart")}
-          />
+          <div className={classes.shoppingCartIconDiv}>
+            <ShoppingCartIcon
+              className={classes.shoppingCartIcon}
+              onClick={() => history.push('/cart')}
+            />
 
-          <div className={classes.shoppingCartItemNum}>{getCartSize()}</div>
-        </div>
-        {isLoggedIn ? <ExitToAppSharpIcon className={classes.logInOut} onClick={()=>{dispatch(logout())}}/> :
-        <VpnKeySharpIcon className={classes.logInOut} onClick={()=>history.push("/login")}/>}
-       </Grid>
+            <div className={classes.shoppingCartItemNum}>{getCartSize()}</div>
+          </div>
+          {isLoggedIn ? (
+            <ExitToAppSharpIcon
+              className={classes.logInOut}
+              onClick={() => {
+                dispatch(logout());
+              }}
+            />
+          ) : (
+            <VpnKeySharpIcon
+              className={classes.logInOut}
+              onClick={() => history.push('/login')}
+            />
+          )}
+        </Grid>
       </Toolbar>
     </AppBar>
   );

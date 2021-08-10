@@ -49,7 +49,8 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: "56.25%", // 16:9
   },
   cardContent: {
-    flexGrow: 1,
+    height: 80,
+    overflow: 'hidden',
   },
   cardActions: {
     display: "flex",
@@ -161,11 +162,11 @@ const AllProducts = () => {
           <Grid container spacing={4}>
             {products.map((product) => (category==="0" || category===product.categoryId) ? (
               <Grid item key={product.id} xs={12} sm={6} md={4}>
-                <Card className={classes.root}>
+                <Card className={classes.card}>
                   <CardHeader
                     avatar={
-                      <Avatar aria-label="recipe" className={classes.avatar}>
-                        R
+                      <Avatar>
+                        {user.imageUrl}
                       </Avatar>
                     }
                     action={
@@ -180,7 +181,7 @@ const AllProducts = () => {
                     className={classes.media}
                     image={product.imageUrl}
                   />
-                  <CardContent>
+                  <CardContent className={classes.cardContent}>
                     <Typography
                       variant="body2"
                       color="textSecondary"

@@ -31,6 +31,7 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
     "pg": "^8.5.1",
+    "react-toastify": "^7.0.4",
     "redux-persist": "^6.0.0",
     "sequelize": "^6.3.5"
   },
