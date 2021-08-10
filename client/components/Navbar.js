@@ -1,20 +1,20 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { logout } from '../store';
-import { useSelector, useDispatch } from 'react-redux';
-import { ButtonBase } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import ExitToAppSharpIcon from '@material-ui/icons/ExitToAppSharp';
-import VpnKeySharpIcon from '@material-ui/icons/VpnKeySharp';
-import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom';
-import Grid from '@material-ui/core/Grid';
+import React from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { logout } from "../store";
+import { useSelector, useDispatch } from "react-redux";
+import { ButtonBase } from "@material-ui/core";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import ExitToAppSharpIcon from "@material-ui/icons/ExitToAppSharp";
+import VpnKeySharpIcon from "@material-ui/icons/VpnKeySharp";
+import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router-dom";
+import Grid from "@material-ui/core/Grid";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   cart: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -26,7 +26,8 @@ const useStyles = makeStyles(theme => ({
     cursor: 'pointer',
   },
   logInOut: {
-    marginLeft: '25px',
+    marginLeft: "25px",
+    cursor: "pointer",
   },
   shoppingCartItemNum: {
     width: '20px',

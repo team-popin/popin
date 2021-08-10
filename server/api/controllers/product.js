@@ -59,10 +59,18 @@ const deleteProduct = async (req, res, next) => {
   }
 };
 
+ const getCategory = async (req,res,next)=>{
+   try{
+    res.send(await Category.findAll())
+   }
+   catch(e){next(e)}
+ };
+
 module.exports = {
   createProduct,
   getProduct,
   updateProduct,
   deleteProduct,
+  getCategory,
   getAllProducts,
 };

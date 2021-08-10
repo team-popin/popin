@@ -10,7 +10,7 @@ const Order = require('./models/Order')
 
 // associations could go here!
 User.hasMany(Product)
-Product.belongsTo(User) 
+Product.belongsTo(User)
 
 User.hasMany(Order)
 Order.belongsTo(User)

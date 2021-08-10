@@ -59,38 +59,25 @@ export const putCart = (timeSlot) => {
         `/api/productTimeSlot/${timeSlot.id}`,
         { orderId: order.id }
       );
-      // add the item to the redux store
-      let localCart = window.localStorage.getItem("cart");
-      if (!localCart) {
-        window.localStorage.setItem("cart", "{}");
-        localCart = window.localStorage.getItem("cart");
-      }
-      const cart = JSON.parse(localCart);
-      if (cart[productTimeSlot.productId]) {
-        cart[productTimeSlot.productId].push(productTimeSlot);
-      } else {
-        cart[productTimeSlot.productId] = [productTimeSlot];
-      }
-      window.localStorage.setItem("cart", JSON.stringify(cart));
-      dispatch(addToCart(productTimeSlot));
+
+      timeSlot = productTimeSlot;
     }
 
     //if a user is not logged in, just add the item to the session storage/redux store (we'll create an order for non-logged-in users when they checkout):
-    else {
-      let localCart = window.localStorage.getItem("cart");
-      if (!localCart) {
-        window.localStorage.setItem("cart", "{}");
-        localCart = window.localStorage.getItem("cart");
-      }
-      const cart = JSON.parse(localCart);
-      if (cart[timeSlot.productId]) {
-        cart[timeSlot.productId].push(timeSlot);
-      } else {
-        cart[timeSlot.productId] = [timeSlot];
-      }
-      window.localStorage.setItem("cart", JSON.stringify(cart));
-      dispatch(addToCart(timeSlot));
+
+    let localCart = window.localStorage.getItem("cart");
+    if (!localCart) {
+      window.localStorage.setItem("cart", "{}");
+      localCart = window.localStorage.getItem("cart");
     }
+    const cart = JSON.parse(localCart);
+    if (cart[timeSlot.productId]) {
+      cart[timeSlot.productId].push(timeSlot);
+    } else {
+      cart[timeSlot.productId] = [timeSlot];
+    }
+    window.localStorage.setItem("cart", JSON.stringify(cart));
+    dispatch(addToCart(timeSlot));
   };
 };
 
@@ -149,17 +136,34 @@ export const cartOnLogin = () => {
         window.localStorage.getItem("cart")
       );
 
+      if (!localCartBeforeLogin) {
+        window.localStorage.setItem("cart", "{}");
+        localCartBeforeLogin = JSON.parse(window.localStorage.getItem("cart"));
+      }
+
       //Add prior-to-logged-in cart items to the openOrder and put them back onto the cart with their order association
 
       let newCartObject = {};
 
-      if (localCartBeforeLogin) {
+      const assignOrderIdToTimeSlot = async (productTimeSlot, theOrder) => {
+        const res = await axios.put(
+          `/api/productTimeSlot/${productTimeSlot.id}`,
+          {
+            orderId: theOrder.id,
+          }
+        );
+        return res;
+      };
+
+      if (Object.keys(localCartBeforeLogin).length > 0) {
         Object.keys(localCartBeforeLogin).map((cartKey) => {
           newCartObject[cartKey] = localCartBeforeLogin[cartKey].map(
-            async (productTimeSlot) => {
-              return await axios.put(`productTimeSlot/${productTimeSlot.id}`, {
-                orderId: order.id,
-              });
+            (productTimeSlot) => {
+              assignOrderIdToTimeSlot(productTimeSlot, order);
+
+              //just manually change the order on object and return that!
+              productTimeSlot.orderId = order.id;
+              return productTimeSlot;
             }
           );
         });
@@ -178,9 +182,6 @@ export const cartOnLogin = () => {
         ];
       });
 
-      console.log(itemsOnOrderBeforeLogin)
-
-
       itemsOnOrderBeforeLogin.map((productTimeSlot) => {
         if (!combinedOrder[productTimeSlot.product.id]) {
           combinedOrder[productTimeSlot.product.id] = [];
@@ -191,9 +192,23 @@ export const cartOnLogin = () => {
         ];
       });
 
-      window.localStorage.setItem("cart", combinedOrder);
+      window.localStorage.setItem("cart", JSON.stringify(combinedOrder));
       dispatch(refreshCartOnLogin(combinedOrder));
     }
+  };
+};
+
+// peter working...
+export const cartOnLogin2 = () => {
+  return async (dispatch) => {
+    const cartBeforeLogin = JSON.parse(window.localStorage.getItem("cart"));
+    if (!cartBeforeLogin) return;
+
+    Object.values(cartBeforeLogin).forEach((timeSlotsArr) => {
+      timeSlotsArr.forEach((timeSlot) => {
+        dispatch(putCart(timeSlot));
+      });
+    });
   };
 };
 
