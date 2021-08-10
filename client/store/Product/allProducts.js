@@ -56,7 +56,7 @@ export const postProduct = (product, timeSlotDate) => {
     const { data: newProduct } = await axios.post('/api/product', product, authHeader);
     dispatch(createProduct(newProduct));
     dispatch(addTimeSlotForProduct(timeSlotDate, newProduct.id));
-    // history.push('/product');
+    history.push('/product');
   };
 };
 
