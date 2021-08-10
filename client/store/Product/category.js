@@ -5,8 +5,10 @@ const GET_CATEGORIES="GET_CATEGORIES";
 const getallCategories = categories =>({type: GET_CATEGORIES, categories})
 
 export const getCategories = () => {
+
   return async dispatch => {
-    const { data } = await axios.get('/api/product/categories')
+    const { data } = await axios.get('/api/product/category')
+    console.log(data)
     dispatch(getallCategories(data))
   }
 }
