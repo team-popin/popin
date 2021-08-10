@@ -13,6 +13,7 @@ import VpnKeySharpIcon from "@material-ui/icons/VpnKeySharp";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles((theme) => ({
   cart: {
@@ -44,6 +45,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'flex-end',
   },
+  addProduct: {
+    marginLeft: "20px",
+    cursor: "pointer"
+  }
 }));
 
 const Navbar = () => {
@@ -77,12 +82,15 @@ const Navbar = () => {
             <div className={classes.shoppingCartItemNum}>{getCartSize()}</div>
           </div>
           {isLoggedIn ? (
+            <div>
+             <AddIcon className={classes.addProduct} onClick={()=>history.push("/addproduct")}/>
             <ExitToAppSharpIcon
               className={classes.logInOut}
               onClick={() => {
                 dispatch(logout());
               }}
             />
+           </div>
           ) : (
             <VpnKeySharpIcon
               className={classes.logInOut}

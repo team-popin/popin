@@ -1,4 +1,6 @@
 import axios from 'axios';
+import history from '../../history';
+import { addTimeSlotForProduct } from './timeSlots';
 
 // ACTION TYPES
 const GET_PRODUCTS = 'GET_PRODUCTS';
@@ -41,10 +43,19 @@ export const fetchProducts = () => {
   };
 };
 
-export const postProduct = (product, history) => {
+export const postProduct = (product, timeSlotDate) => {
+  
   return async dispatch => {
-    const { data } = await axios.post('/api/product', product);
-    dispatch(createProduct(data));
+    const token = window.localStorage.getItem('token');
+    const authHeader = {
+      headers: {
+        authorization: token
+      }
+    }
+    
+    const { data: newProduct } = await axios.post('/api/product', product, authHeader);
+    dispatch(createProduct(newProduct));
+    dispatch(addTimeSlotForProduct(timeSlotDate, newProduct.id));
     // history.push('/product');
   };
 };
