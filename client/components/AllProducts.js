@@ -21,6 +21,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 const useStyles = makeStyles(theme => ({
+  media: {
+    height: 0,
+    paddingTop: '56.25%', // 16:9
+  },
   icon: {
     marginRight: theme.spacing(2),
   },
@@ -31,39 +35,17 @@ const useStyles = makeStyles(theme => ({
   heroButtons: {
     marginTop: theme.spacing(4),
   },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-  },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  cardMedia: {
-    paddingTop: '56.25%', // 16:9
-  },
-  cardContent: {
-    flexGrow: 1,
+  avatar: {
+    backgroundColor: red[500],
   },
   cardActions: {
     display: 'flex',
     justifyContent: 'center',
+    alignItems: 'flex-start',
   },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(6),
-  },
-  root: {
-    maxWidth: 345,
-  },
-  media: {
-    height: 0,
-    paddingTop: '56.25%', // 16:9
-  },
-  avatar: {
-    backgroundColor: red[500],
-  },
+  cardGrid: {
+    marginTop: 16
+  }
 }));
 
 const AllProducts = () => {
@@ -117,7 +99,7 @@ const AllProducts = () => {
           <Grid container spacing={4}>
             {products.map(product => (
               <Grid item key={product.id} xs={12} sm={6} md={4}>
-                <Card className={classes.root}>
+                <Card className={classes.card}>
                   <CardHeader
                     avatar={
                       <Avatar aria-label="recipe" className={classes.avatar}>
@@ -136,7 +118,7 @@ const AllProducts = () => {
                     className={classes.media}
                     image={product.imageUrl}
                   />
-                  <CardContent>
+                  <CardContent style={{ height: 80, overflow: 'hidden' }}>
                     <Typography
                       variant="body2"
                       color="textSecondary"
