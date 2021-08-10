@@ -1,26 +1,103 @@
 const router = require("express").Router();
 const { models: { Order }} = require('../../db');
-const {getAllOrder, createOrder, updateOrder, updateOrderById, getOpenOrderByUser, getOrderById, getOrderOfUser} = require('../controllers/order')
+const { requireUser } = require('../../middleware');
 
-// query string handler
-router.get("/", getAllOrder);
+// GET /api/order
+router.get("/", requireUser, async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const isPurchased = req.query.isPurchased;
 
-//get orders for an individual user
-router.get("/user/:id", getOrderOfUser);
+    const orders = await Order.findAll({
+      where: {
+        userId,
+        isPurchased
+      }
+    });
+    res.json(orders);
+  }
+  catch (err) {
+    next(err);
+  }
+});
 
-//Get open order 'api/order/open_order?userId=3'
-router.get('/openOrder', getOpenOrderByUser);
+// POST /api/order
+// This route can't be protected
+router.post('/', async (req, res, next) => {
+  try {
+    const newOrder = await Order.create({isPurchased: req.body.isPurchased});
+    newOrder.setUser(req.body.userId);
+    res.json(newOrder);
+  }
+  catch (err) {
+    next(err);
+  }
+});
 
-//get order by id
-router.get("/:id", getOrderById);
+// GET /api/order/user
+router.get("/user", requireUser, async (req, res, next) => {
+  try {
+    const orders = await Order.findAll({
+      where: {
+        userId: req.user.id
+      }
+    });
+    res.json(orders);
+  } catch (err) {
+    next(err);
+  }
+});
 
-//put order
-router.put('/openOrder', updateOrder);
+// GET /api/order/openOrder
+router.get('/openOrder', requireUser, async (req, res, next) => {
+  try {
+    // query string: userId
+    const order = await Order.findOne({where: {userId: req.user.id, isPurchased: false}});
+    res.json(order);
+  }
+  catch (err) {
+    next(err);
+  }
+});
 
-//put order by id
-router.put('/:id', updateOrderById);
+// PUT /api/order/openOrder
+router.put('/openOrder', requireUser, async (req, res, next) => {
+  try {
+    const order = await Order.findOne({where: {userId: req.user.id, isPurchased: false}});
+    const updatedOrder = await order.update({
+      isPurchased: req.body.isPurchased
+    });
+    res.json(updatedOrder);
+  }
+  catch (err) {
+    next(err);
+  }
+});
 
-//post order
-router.post('/', createOrder);
+// ROUTE NOT IN USE
+// // GET /api/order/guest/:id
+// router.get("/guest/:id", async (req, res, next) => {
+//   try {
+//     const order = await Order.findByPk(req.params.id, {where: {userId: null}})
+//     res.json(order);
+//   } catch (err) {
+//     next(err);
+//   }
+// });
+
+// PUT /api/order/guest/:id
+router.put('/guest/:id', async (req, res, next) => {
+  try {
+    const order = await Order.findByPk(req.params.id);
+    const updatedOrder = await order.update({
+      isPurchased: req.body.isPurchased
+    });
+    res.json(updatedOrder);
+  }
+  catch (err) {
+    next(err);
+  }
+});
+
 
 module.exports = router;

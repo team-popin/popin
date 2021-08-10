@@ -12,18 +12,6 @@ app.use(morgan('dev'))
 // body parsing middleware
 app.use(express.json())
 
-//
-// const requireToken = async (req, res, next) => {
-//   try {
-//     const token = req.headers.authorization;
-//     const user = await User.byToken(token);
-//     req.user = user;
-//     next();
-//   } catch(error) {
-//     next(error);
-//   }
-// };
-
 
 // auth and api routes
 app.use('/auth', require('./auth'));

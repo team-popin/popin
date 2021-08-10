@@ -1,29 +1,75 @@
 const router = require('express').Router();
-const {
-  getProduct,
-  getAllProducts,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-  getCategory,
-} = require('../controllers/product');
+const { models: { Product, ProductTimeSlot, Category, User } } = require('../../db');
 
-// get all products
-router.get('/', getAllProducts);
+// GET /api/product
+router.get('/', async (req, res, next) => {
+  try {
+    res.send(await Product.findAll());
+  } catch (e) {
+    next(e);
+  }
+});
 
-router.get('/category', getCategory)
+// GET /api/product/category
+router.get('/category', async (req,res,next)=>{
+  try{
+   res.send(await Category.findAll())
+  }
+  catch(e){next(e)}
+});
 
-// get product by id
-router.get('/:id', getProduct);
+// GET /api/product/:id
+router.get('/:id', async (req, res, next) => {
+  try {
+    const product = await Product.findOne({
+      where: {
+        id: req.params.id,
+      },
+      include: {
+        model: ProductTimeSlot.findAll({
+          where: {
+            productId: req.params.id,
+          },
+        }),
+        model: Category,
+        model: User,
+      },
+    });
+    res.send(product);
+  } catch (e) {
+    next(e);
+  }
+});
 
-// create product
-router.post('/', createProduct);
+// POST /api/product
+router.post('/', async (req, res, next) => {
+  try {
+    res.send(await Product.create(req.body));
+  } catch (e) {
+    next(e);
+  }
+});
 
-// update product by id
-router.put('/:id', updateProduct);
+// PUT /api/product/:id
+router.put('/:id', async (req, res, next) => {
+  try {
+    const product = await Product.findByPk(req.params.id);
+    res.send(await product.update(req.body));
+  } catch (e) {
+    next(e);
+  }
+});
 
-// delete product by id
-router.delete('/:id', deleteProduct);
+// DELETE /api/product/:id
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const product = await Product.findByPk(req.params.id);
+    await product.destroy();
+    res.send(product);
+  } catch (e) {
+    next(e);
+  }
+});
 
 
 router.use((req, res, next) => {

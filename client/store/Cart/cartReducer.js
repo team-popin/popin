@@ -26,24 +26,26 @@ const clearCart = () => ({
   type: CLEAR_CART_ON_CHECKOUT,
 });
 
+// Get token from localStorage
+const token = window.localStorage.getItem("token");
+
+const authHeader = {
+  headers: {
+    authorization: token
+  }
+};
+
 // thunk creators
 export const putCart = (timeSlot) => {
   //if user is logged in, get their orderId
   return async (dispatch) => {
-    const token = window.localStorage.getItem("token");
     //if a user is logged in
     if (token) {
       //then get user
-      const { data: user } = await axios.get("/auth/me", {
-        headers: {
-          authorization: token,
-        },
-      });
+      const { data: user } = await axios.get("/auth/me", authHeader);
 
       // then check if any associated order exists. If exists, simply get the order from server.
-      let { data: order } = await axios.get(
-        `/api/order/openOrder?userId=${user.id}`
-      );
+      let { data: order } = await axios.get(`/api/order/openOrder`, authHeader);
 
       // if no existing order, create a new order for the user
       if (!order) {
@@ -86,7 +88,7 @@ export const removeItemFromCart = (timeSlot) => {
     // const { data } = await axios.get(`/api/productTimeSlot/${timeSlot.id}`);
 
     // if a user is logged in
-    const token = window.localStorage.getItem("token");
+    // const token = window.localStorage.getItem("token");
     if (token) {
       // Remove order association from productTimeSlot
       await axios.put(`/api/productTimeSlot/${timeSlot.id}`, { orderId: null });
@@ -100,20 +102,15 @@ export const cartOnLogin = () => {
     //Check if the user has an open order using user object from token
     //Create an order for user, if it doesn't exist
 
-    const token = window.localStorage.getItem("token");
+    // const token = window.localStorage.getItem("token");
     //if a user is logged in
     if (token) {
       //then get user
-      const { data: user } = await axios.get("/auth/me", {
-        headers: {
-          authorization: token,
-        },
-      });
+      const { data: user } = await axios.get("/auth/me", authHeader);
 
       // then check if any associated order exists. If exists, simply get the order from server.
       let { data: order } = await axios.get(
-        `/api/order/openOrder?userId=${user.id}`
-      );
+        `/api/order/openOrder`, authHeader);
 
       // if no existing order, create a new order for the user
       if (!order) {
@@ -167,7 +164,7 @@ export const cartOnLogin = () => {
             }
           );
         });
-      }
+      };
 
       //Combine old and new into one object
       let combinedOrder = {};
@@ -195,20 +192,6 @@ export const cartOnLogin = () => {
       window.localStorage.setItem("cart", JSON.stringify(combinedOrder));
       dispatch(refreshCartOnLogin(combinedOrder));
     }
-  };
-};
-
-// peter working...
-export const cartOnLogin2 = () => {
-  return async (dispatch) => {
-    const cartBeforeLogin = JSON.parse(window.localStorage.getItem("cart"));
-    if (!cartBeforeLogin) return;
-
-    Object.values(cartBeforeLogin).forEach((timeSlotsArr) => {
-      timeSlotsArr.forEach((timeSlot) => {
-        dispatch(putCart(timeSlot));
-      });
-    });
   };
 };
 

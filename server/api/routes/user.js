@@ -1,11 +1,40 @@
 const router = require('express').Router();
+const {
+  models: { User, Order },
+} = require('../../db');
 const { createUser, getUser, updateUser } = require('../controllers/user');
 
-router.post('/', createUser);
+// POST /api/user
+router.post('/', async (req, res, next) => {
+  try {
+    res.send(await User.create(req.body));
+  } catch (e) {
+    next(e);
+  }
+});
 
-router.get('/:id', getUser);
+// GET /api/user/:id
+router.get('/:id', async (req, res, next) => {
+  try {
+    res.send(
+      await User.findByPk(req.params.id, {
+        include: Order,
+      })
+    );
+  } catch (e) {
+    next(e);
+  }
+});
 
-router.put('/:id', updateUser);
+// PUT /api/user:id
+router.put('/:id', async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.params.id);
+    res.send(await user.update(req.body));
+  } catch (e) {
+    next(e);
+  }
+});
 
 router.use((req, res, next) => {
   const err = new Error('API route not found!');

@@ -18,28 +18,31 @@ export const checkoutCartThunk = cart => {
 
   return async dispatch => {
     const token = window.localStorage.getItem('token');
+
+    const authHeader = {
+      headers: {
+        authorization: token
+      }
+    };
+
     //if a user is logged in
     if (token) {
       //then get user
-      const { data: user } = await axios.get('/auth/me', {
-        headers: {
-          authorization: token,
-        },
-      });
+      const { data: user } = await axios.get('/auth/me', authHeader);
 
       //We know the user has an open order by this point, so we are going to change isPurchased to true!
       const { data: order } = await axios.put(
-        `api/order/openOrder?userId=${user.id}`,
-        { isPurchased: true }
-      );
-      // console.log("THUNK RUNNING")
+        `/api/order/openOrder`,
+        { isPurchased: true },
+        authHeader);
+
       // add the item to the redux store
       dispatch(checkoutCart(order));
     }
 
     //If a user is not logged in, lets create a new order for them now and associate the items in the redux store cart with the order
     else {
-      const { data: order } = await axios.post('api/order', {isPurchased: false});
+      const { data: order } = await axios.post('/api/order', {isPurchased: false});
 
       console.log("Cart Object>>>>>", cart)
       //Associate all of the productTimeSlots on the redux store cart with this order
@@ -71,7 +74,7 @@ export const checkoutCartThunk = cart => {
       });
 
       //Change isPurchased in the order to true
-      const { data: updatedOrder } = await axios.put(`api/order/${order.id}`, {
+      const { data: updatedOrder } = await axios.put(`/api/order/guest/${order.id}`, {
         isPurchased: true,
       });
 
