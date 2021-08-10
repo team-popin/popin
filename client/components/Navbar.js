@@ -28,6 +28,7 @@ const useStyles = makeStyles(theme => ({
   },
   logInOut: {
     marginLeft: '25px',
+    cursor: 'pointer',
   },
   shoppingCartItemNum: {
     width: '20px',
