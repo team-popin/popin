@@ -1,31 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { fetchProducts } from '../store/Product/allProducts';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Avatar from '@material-ui/core/Avatar';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import {getCategories} from '../store/Product/category';
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { fetchProducts } from "../store/Product/allProducts";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import Avatar from "@material-ui/core/Avatar";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import { red } from "@material-ui/core/colors";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import { getCategories } from "../store/Product/category";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   icon: {
     marginRight: theme.spacing(2),
   },
@@ -41,19 +41,19 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(8),
   },
   card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
   },
   cardMedia: {
-    paddingTop: '56.25%', // 16:9
+    paddingTop: "56.25%", // 16:9
   },
   cardContent: {
     flexGrow: 1,
   },
   cardActions: {
-    display: 'flex',
-    justifyContent: 'center',
+    display: "flex",
+    justifyContent: "center",
   },
   footer: {
     backgroundColor: theme.palette.background.paper,
@@ -64,14 +64,15 @@ const useStyles = makeStyles(theme => ({
   },
   media: {
     height: 0,
-    paddingTop: '56.25%', // 16:9
+    paddingTop: "56.25%", // 16:9
   },
   avatar: {
     backgroundColor: red[500],
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: 200,
+    marginLeft: "175px",
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -79,24 +80,24 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const AllProducts = () => {
-  const products = useSelector(state => state.products);
-  const user = useSelector(state => state.user);
-  // const categories = useSelector(state => state.categories);
+  const products = useSelector((state) => state.products);
+  const user = useSelector((state) => state.user);
+  const categories = useSelector((state) => state.categories);
   const dispatch = useDispatch();
   const classes = useStyles();
-//
+  //
   useEffect(() => {
     dispatch(fetchProducts());
-    // dispatch(getCategories());
+    dispatch(getCategories());
   }, [dispatch]);
 
-  const [category, setCategory] = React.useState('');
+  const [category, setCategory] = React.useState("0");
 
   const handleChange = (event) => {
     setCategory(event.target.value);
   };
 
-//
+  //
   return (
     <React.Fragment>
       <CssBaseline />
@@ -111,7 +112,7 @@ const AllProducts = () => {
               color="textPrimary"
               gutterBottom
             >
-              {user.firstName ? `Welcome, ${user.firstName}!` : 'Welcome!'}
+              {user.firstName ? `Welcome, ${user.firstName}!` : "Welcome!"}
             </Typography>
             <Typography
               variant="h5"
@@ -124,21 +125,26 @@ const AllProducts = () => {
             </Typography>
 
             <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel id="demo-simple-select-outlined-label">Category</InputLabel>
-        <Select
-          labelId="demo-simple-select-outlined-label"
-          id="demo-simple-select-outlined"
-          value={category}
-          onChange={handleChange}
-          label="Category"
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-{/* {categories.map(category=>{ <MenuItem key= {category.id} value={category.name}>{category.name}</MenuItem>})
-         } */}
-        </Select>
-      </FormControl>
+              <InputLabel id="demo-simple-select-outlined-label">
+                Category
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={category}
+                onChange={handleChange}
+                label="Category"
+              >
+                <MenuItem value="0">
+                  <em>All</em>
+                </MenuItem>
+                {categories.map((categoryB) => 
+                  (<MenuItem key={categoryB.id} value={categoryB.id}>
+                    {categoryB.name}
+                  </MenuItem>)
+                )}
+              </Select>
+            </FormControl>
           </Container>
         </div>
         {/* End hero unit */}
@@ -153,7 +159,7 @@ const AllProducts = () => {
             Trending services
           </Typography>
           <Grid container spacing={4}>
-            {products.map(product => (
+            {products.map((product) => (category==="0" || category===product.categoryId) ? (
               <Grid item key={product.id} xs={12} sm={6} md={4}>
                 <Card className={classes.root}>
                   <CardHeader
@@ -192,7 +198,7 @@ const AllProducts = () => {
                   </CardActions>
                 </Card>
               </Grid>
-            ))}
+            ):<></>)}
           </Grid>
         </Container>
       </main>
