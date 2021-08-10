@@ -35,8 +35,9 @@ const useStyles = makeStyles(theme => ({
   heroButtons: {
     marginTop: theme.spacing(4),
   },
-  avatar: {
-    backgroundColor: red[500],
+  cardContent: {
+    height: 80,
+    overflow: 'hidden',
   },
   cardActions: {
     display: 'flex',
@@ -44,8 +45,8 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'flex-start',
   },
   cardGrid: {
-    marginTop: 16
-  }
+    marginTop: 16,
+  },
 }));
 
 const AllProducts = () => {
@@ -96,14 +97,14 @@ const AllProducts = () => {
           >
             Trending services
           </Typography>
-          <Grid container spacing={4}>
+          <Grid container spacing={6}>
             {products.map(product => (
               <Grid item key={product.id} xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
                   <CardHeader
                     avatar={
-                      <Avatar aria-label="recipe" className={classes.avatar}>
-                        R
+                      <Avatar>
+                        {user.imageUrl}
                       </Avatar>
                     }
                     action={
@@ -118,7 +119,7 @@ const AllProducts = () => {
                     className={classes.media}
                     image={product.imageUrl}
                   />
-                  <CardContent style={{ height: 80, overflow: 'hidden' }}>
+                  <CardContent className={classes.cardContent}>
                     <Typography
                       variant="body2"
                       color="textSecondary"
