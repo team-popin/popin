@@ -138,7 +138,7 @@ const AllProducts = () => {
                 <MenuItem value="0">
                   <em>All</em>
                 </MenuItem>
-                {categories.map((categoryB) => 
+                {categories.map((categoryB) =>
                   (<MenuItem key={categoryB.id} value={categoryB.id}>
                     {categoryB.name}
                   </MenuItem>)

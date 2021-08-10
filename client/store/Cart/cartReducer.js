@@ -26,19 +26,18 @@ const clearCart = () => ({
   type: CLEAR_CART_ON_CHECKOUT,
 });
 
-// Get token from localStorage
-const token = window.localStorage.getItem("token");
-
-const authHeader = {
-  headers: {
-    authorization: token
-  }
-};
 
 // thunk creators
 export const putCart = (timeSlot) => {
   //if user is logged in, get their orderId
   return async (dispatch) => {
+    const token = window.localStorage.getItem("token");
+    const authHeader = {
+      headers: {
+        authorization: token
+      }
+    };
+
     //if a user is logged in
     if (token) {
       //then get user
@@ -87,6 +86,8 @@ export const removeItemFromCart = (timeSlot) => {
   return async (dispatch) => {
     // const { data } = await axios.get(`/api/productTimeSlot/${timeSlot.id}`);
 
+    const token = window.localStorage.getItem("token");
+
     // if a user is logged in
     // const token = window.localStorage.getItem("token");
     if (token) {
@@ -98,11 +99,17 @@ export const removeItemFromCart = (timeSlot) => {
 };
 
 export const cartOnLogin = () => {
-  return async (dispatch) => {
-    //Check if the user has an open order using user object from token
-    //Create an order for user, if it doesn't exist
 
-    // const token = window.localStorage.getItem("token");
+
+  return async (dispatch) => {
+    //Check if the user has an open order using user object from token & create an order for user, if it doesn't exist
+
+    const token = window.localStorage.getItem("token");
+    const authHeader = {
+      headers: {
+        authorization: token
+      }
+    };
     //if a user is logged in
     if (token) {
       //then get user
