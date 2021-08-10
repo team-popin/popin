@@ -141,6 +141,7 @@ const users = [
     firstName: "Jane",
     lastName: "Doe",
     bio: "Hello, I am Jane. I am a master of Guitar and drums.",
+    isAdmin: true
   },
   {
     email: "user2@email.com",

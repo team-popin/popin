@@ -1,16 +1,11 @@
+const { requireAdmin } = require('../../middleware');
 const {
   models: { User, Order },
 } = require('../../db');
+const router = require('express').Router();
 
-const createUser = async (req, res, next) => {
-  try {
-    res.send(await User.create(req.body));
-  } catch (e) {
-    next(e);
-  }
-};
-
-const getUser = async (req, res, next) => {
+// GET /api/user/:id
+router.get('/:id', requireAdmin, async (req, res, next) => {
   try {
     res.send(
       await User.findByPk(req.params.id, {
@@ -20,19 +15,16 @@ const getUser = async (req, res, next) => {
   } catch (e) {
     next(e);
   }
-};
+});
 
-const updateUser = async (req, res, next) => {
+// PUT /api/user:id
+router.put('/:id', requireAdmin, async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id);
     res.send(await user.update(req.body));
   } catch (e) {
     next(e);
   }
-};
+});
 
-module.exports = {
-  createUser,
-  getUser,
-  updateUser,
-};
+module.exports = router;
