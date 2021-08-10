@@ -41,7 +41,6 @@ export const authenticate = (email, password, method) => async (dispatch) => {
 
 export const signUpThunk = (form) => async (dispatch) => {
   try {
-    console.log("SIGNUP THUNK RUNNING");
     const res = await axios.post("/auth/signup", form);
     window.localStorage.setItem(TOKEN, res.data.token);
     dispatch(me());

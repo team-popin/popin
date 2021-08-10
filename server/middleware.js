@@ -25,7 +25,6 @@ const requireUser = async (req, res, next) => {
 
 const requireAdmin = async (req, res, next ) => {
   try {
-    console.log('AUTH HEADERS', req.headers.authorization);
     const token = req.headers.authorization;
     const user = await User.findByToken(token);
 

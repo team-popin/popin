@@ -26,7 +26,6 @@ const clearCart = () => ({
   type: CLEAR_CART_ON_CHECKOUT,
 });
 
-
 // thunk creators
 export const putCart = (timeSlot) => {
   //if user is logged in, get their orderId
@@ -34,8 +33,8 @@ export const putCart = (timeSlot) => {
     const token = window.localStorage.getItem("token");
     const authHeader = {
       headers: {
-        authorization: token
-      }
+        authorization: token,
+      },
     };
 
     //if a user is logged in
@@ -99,16 +98,14 @@ export const removeItemFromCart = (timeSlot) => {
 };
 
 export const cartOnLogin = () => {
-
-
   return async (dispatch) => {
     //Check if the user has an open order using user object from token & create an order for user, if it doesn't exist
 
     const token = window.localStorage.getItem("token");
     const authHeader = {
       headers: {
-        authorization: token
-      }
+        authorization: token,
+      },
     };
     //if a user is logged in
     if (token) {
@@ -116,8 +113,7 @@ export const cartOnLogin = () => {
       const { data: user } = await axios.get("/auth/me", authHeader);
 
       // then check if any associated order exists. If exists, simply get the order from server.
-      let { data: order } = await axios.get(
-        `/api/order/openOrder`, authHeader);
+      let { data: order } = await axios.get(`/api/order/openOrder`, authHeader);
 
       // if no existing order, create a new order for the user
       if (!order) {
@@ -171,7 +167,7 @@ export const cartOnLogin = () => {
             }
           );
         });
-      };
+      }
 
       //Combine old and new into one object
       let combinedOrder = {};

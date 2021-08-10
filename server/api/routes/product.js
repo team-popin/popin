@@ -46,34 +46,34 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-// // POST /api/product
-// router.post('/', async (req, res, next) => {
-//   try {
-//     res.send(await Product.create(req.body));
-//   } catch (e) {
-//     next(e);
-//   }
-// });
+// POST /api/product
+router.post('/', requireUser, async (req, res, next) => {
+  try {
+    res.send(await Product.create(req.body));
+  } catch (e) {
+    next(e);
+  }
+});
 
 // PUT /api/product/:id
-// router.put("/:id", requireUser, async (req, res, next) => {
-//   try {
-//     const product = await Product.findByPk(req.params.id, {where: {userId: req.user.id}});
-//     res.send(await product.update(req.body));
-//   } catch (e) {
-//     next(e);
-//   }
-// });
+router.put("/:id", requireUser, async (req, res, next) => {
+  try {
+    const product = await Product.findByPk(req.params.id, {where: {userId: req.user.id}});
+    res.send(await product.update(req.body));
+  } catch (e) {
+    next(e);
+  }
+});
 
 // DELETE /api/product/:id
-// router.delete("/:id", requireUser, async (req, res, next) => {
-//   try {
-//     const product = await Product.findByPk(req.params.id, {where: {userId: req.user.id});
-//     await product.destroy();
-//     res.send(product);
-//   } catch (e) {
-//     next(e);
-//   }
-// });
+router.delete("/:id", requireUser, async (req, res, next) => {
+  try {
+    const product = await Product.findByPk(req.params.id, {where: {userId: req.user.id}});
+    await product.destroy();
+    res.send(product);
+  } catch (e) {
+    next(e);
+  }
+});
 
 module.exports = router;

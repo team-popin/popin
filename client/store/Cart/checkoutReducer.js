@@ -44,7 +44,6 @@ export const checkoutCartThunk = cart => {
     else {
       const { data: order } = await axios.post('/api/order', {isPurchased: false});
 
-      console.log("Cart Object>>>>>", cart)
       //Associate all of the productTimeSlots on the redux store cart with this order
       //First, we must flatten the cart object into an array containing just the productTimeSlots
       const productTimeSlots2DArray = Object.keys(cart).map(key => {
@@ -55,7 +54,6 @@ export const checkoutCartThunk = cart => {
 
       //This is a flattened array, containing the productTimeSlots (which are objects)
       let productTimeSlotsFlattened = [];
-      console.log(productTimeSlotsFlattened)
       for (let i = 0; i < productTimeSlots2DArray.length; i++) {
         productTimeSlotsFlattened.push(...productTimeSlots2DArray[i]);
 
