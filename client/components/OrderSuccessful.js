@@ -28,17 +28,20 @@ const useStyles = makeStyles((theme) => ({
 export default function OrderSuccessful() {
   let history = useHistory();
   let [timer, setTimer] = React.useState(5);
-  let count = 5;
   const classes = useStyles();
+
   useEffect(() => {
-    const timer = setTimeout(() => {
+    setTimeout(() => {
       history.push("/");
-    }, 5000);
-    const timer2 = setTimeout(() => {
-      return count--;
-    }, 5000);
-    return () => clearTimeout(timer, timer2);
-  }, []);
+    }, 6000);
+    const interval = setInterval(() => {
+         const newTime = timer--;
+         setTimer(newTime);
+    }, 1000)
+    return () => {
+        clearInterval(interval);
+    }
+}, 5000)
 
   return (
     <React.Fragment>
@@ -51,7 +54,7 @@ export default function OrderSuccessful() {
               Thank you for your order!
             </Typography>
             <Typography className={classes.text2}>
-              You will be redirected in {setTimeout(()=>{setTimer(state=>state-1)},5000)} seconds.
+              You will be redirected in {timer} seconds.
             </Typography>
           </Card>
         </Grid>

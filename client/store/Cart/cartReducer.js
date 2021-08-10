@@ -141,34 +141,38 @@ export const cartOnLogin = () => {
         localCartBeforeLogin = JSON.parse(window.localStorage.getItem("cart"));
       }
 
-      console.log("THIS IS THE LOCAL CART BEFORE LOGIN", localCartBeforeLogin);
-
       //Add prior-to-logged-in cart items to the openOrder and put them back onto the cart with their order association
 
       let newCartObject = {};
 
-      console.log(Array.isArray(Object.keys(localCartBeforeLogin)));
+      const assignOrderIdToTimeSlot = async (productTimeSlot, theOrder) => {
+        const res = await axios.put(
+          `/api/productTimeSlot/${productTimeSlot.id}`,
+          {
+            orderId: theOrder.id,
+          }
+        );
+        return res;
+      };
 
       if (Object.keys(localCartBeforeLogin).length > 0) {
-        Object.keys(localCartBeforeLogin).map(async (cartKey) => {
-          newCartObject[cartKey] = await Promise.all(
-            localCartBeforeLogin[cartKey].map(async (productTimeSlot) => {
-              const {data} = await axios.put(`productTimeSlot/${productTimeSlot.id}`, {
-                orderId: order.id,
-              });
-              return data
-            })
+        Object.keys(localCartBeforeLogin).map((cartKey) => {
+          newCartObject[cartKey] = localCartBeforeLogin[cartKey].map(
+            (productTimeSlot) => {
+              assignOrderIdToTimeSlot(productTimeSlot, order);
+
+              //just manually change the order on object and return that!
+              productTimeSlot.orderId = order.id;
+              return productTimeSlot;
+            }
           );
         });
       }
-
-      console.log("NEW CART OBJECT>>>>>>", newCartObject);
 
       //Combine old and new into one object
       let combinedOrder = {};
 
       Object.keys(newCartObject).map((cartKey) => {
-        console.log("MAPPING OVER THE NEWCARTOBJECT", newCartObject);
         if (!combinedOrder[cartKey]) {
           combinedOrder[cartKey] = [];
         }
@@ -177,8 +181,6 @@ export const cartOnLogin = () => {
           ...newCartObject[cartKey],
         ];
       });
-
-      console.log("ITEMS ON ORDER BEFORE LOGIN", itemsOnOrderBeforeLogin);
 
       itemsOnOrderBeforeLogin.map((productTimeSlot) => {
         if (!combinedOrder[productTimeSlot.product.id]) {
@@ -190,8 +192,6 @@ export const cartOnLogin = () => {
         ];
       });
 
-      console.log("THIS IS THE COMBINED ORDER", combinedOrder);
-
       window.localStorage.setItem("cart", JSON.stringify(combinedOrder));
       dispatch(refreshCartOnLogin(combinedOrder));
     }
@@ -200,17 +200,17 @@ export const cartOnLogin = () => {
 
 // peter working...
 export const cartOnLogin2 = () => {
-  return async dispatch => {
-    const cartBeforeLogin = JSON.parse(window.localStorage.getItem('cart'));
+  return async (dispatch) => {
+    const cartBeforeLogin = JSON.parse(window.localStorage.getItem("cart"));
     if (!cartBeforeLogin) return;
 
-    Object.values(cartBeforeLogin).forEach(timeSlotsArr => {
-      timeSlotsArr.forEach(timeSlot => {
+    Object.values(cartBeforeLogin).forEach((timeSlotsArr) => {
+      timeSlotsArr.forEach((timeSlot) => {
         dispatch(putCart(timeSlot));
-      })
-    })
-  }
-}
+      });
+    });
+  };
+};
 
 export const clearCartThunk = () => {
   return async (dispatch) => {
