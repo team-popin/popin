@@ -210,6 +210,7 @@ const SingleProduct = (props) => {
                                 key={timeSlot.id}
                                 variant="contained"
                                 color="primary"
+                                style={{ margin: "5px"}}
                                 onClick={() => {
                                   dispatch(putCart(timeSlot));
                                   getTimeSlotsForDates(
