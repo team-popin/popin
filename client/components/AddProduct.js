@@ -109,23 +109,12 @@ const AddProduct = () => {
         userId: user.id,
       }, selectedDate), 
     );
-    
-    // const newProduct = useSelector(state => )
-    // console.log(products)
-    // console.log(newProduct)
   };
   
-  // const addTimeSlotToProduct = () => {    
-  //   dispatch(addTimeSlotForProduct({
-  //     dateTime: selectedDate,
-  //     productId: .id
-  //   }))
-  // }
 
   const [selectedDate, setSelectedDate] = React.useState(
     Date.now()
   );
-// new ("2021-08-18T21:00:00")
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };

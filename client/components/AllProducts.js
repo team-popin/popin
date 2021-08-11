@@ -121,8 +121,8 @@ const AllProducts = () => {
               color="textSecondary"
               paragraph
             >
-              Pick a category from the drop down menu to get started with a
-              session from professionals from around the world!
+              Get started with a
+              session from professionals around the world by selecting category below!
             </Typography>
 
             <FormControl variant="outlined" className={classes.formControl}>
