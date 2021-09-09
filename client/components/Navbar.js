@@ -48,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
   addProduct: {
     marginLeft: "20px",
     cursor: "pointer"
+  },
+  logo: {
+    height: '2.5em'
   }
 }));
 
@@ -68,9 +71,7 @@ const Navbar = () => {
     <AppBar position="relative">
       <Toolbar className={classes.cart}>
         <ButtonBase onClick={() => history.push('/product')}>
-          <Typography variant="h6" color="inherit" noWrap>
-            Pop In!
-          </Typography>
+          <img src="/popin-logo-full.png" className={classes.logo}/>
         </ButtonBase>
         <Grid className={classes.Icons}>
           <div className={classes.shoppingCartIconDiv}>

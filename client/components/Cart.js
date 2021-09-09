@@ -119,7 +119,7 @@ export default function Cart() {
             {Object.keys(cart).map((productId) => {
               const productTimeSlots = cart[productId];
               //If the productTimeSlots array has product time slots in it (this is important because when a user removes all of the items of a certain product from their cart, they are left with the key-value pair for that product in their car, but the value (array) is empty and will break the page without this condition.)
-              if (productTimeSlots[0]) {
+              if (productTimeSlots[0] && productTimeSlots[0].product) {
                 return (
                   <Grid key={productId} >
                     <Card
@@ -137,7 +137,7 @@ export default function Cart() {
                           borderRadius: "10px",
                           marginLeft: "20px",
                           marginTop: "20px"
-                        }} 
+                        }}
                           onClick={() =>
                             history.push(
                               `/product/${productTimeSlots[0].product.id}`
@@ -200,9 +200,9 @@ export default function Cart() {
             color: "white",
             fontSize: "20px",
             alignItems: "center",
-            margin: "10px 10px 50px 10px", 
+            margin: "10px 10px 50px 10px",
             width: "200px",
-            
+
           }}
           onClick={() => {
             dispatch(checkoutCartThunk(cart));
