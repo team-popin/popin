@@ -15,9 +15,9 @@
 Pop In! is an app where you can sign up for an instant session with an expert in a particular field where you need an immediate help with or have questions that you want answered right now!
 
 - Any Pop In! user can register a session product in the fields in which he/she is an expert and can provide help to others
-- Anyone can view all available sessions in Pop In's main page and signup for/purchase a particular session time slot (You can enjoy Pop In! sessions as a guest as well!)
+- Anyone can view all available sessions in Pop In!'s main page and signup for/purchase a particular session time slot (You can enjoy Pop In! sessions as a guest as well!)
 
-> ### _If you need an instant help or have any questions in any field - law, medical, language, cooking, stock investing, cryptocurrency, etc. - just pop in to a session with an expert/professional in the area of your needs at Popin!_
+> ### _If you need an instant help or have any questions in any field - law, medical, language, cooking, stock investing, cryptocurrency, etc. - just pop in to a session with an expert/professional in the area of your needs at Pop In!_
 
 <br/>
 
@@ -43,7 +43,7 @@ Built with <a href="https://github.com/FullstackAcademy/boilermaker" target="_bl
 
 ## The Engineers
 
-Pop In was created by Peter Lee, Albina Usmanova, Jonathan Blanco, and Nick Fasulo as part of Fullstack Academy's team project, completed in just 1 week!
+Pop In! was created by Peter Lee, Albina Usmanova, Jonathan Blanco, and Nick Fasulo as part of Fullstack Academy's team project, completed in just 1 week!
 
 - <a href="https://github.com/pdl39" target="_blank"><p>Peter D. Lee</p>
 - <a href="https://github.com/Lighein" target="_blank"><p>Albina Usmanova</p>
